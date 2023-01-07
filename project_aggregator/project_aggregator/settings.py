@@ -38,6 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
+    'app_carts',
+    'app_catalog',
+    'app_comments',
+    'app_configurations',
+    'app_movement_goods',
+    'app_orders',
+    'app_payments',
+    'app_users',
 ]
 
 MIDDLEWARE = [
@@ -132,7 +140,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 DATE_INPUT_FORMATS = [
     '%d-%m-%Y',  # '25-10-2006'
@@ -177,3 +185,5 @@ LOGGING = {
 FIXTURE_DIRS = [BASE_DIR / "fixtures"]
 
 NUMBER_GROUPING = 3
+
+AUTH_USER_MODEL = 'app_users.User'
