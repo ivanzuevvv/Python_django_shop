@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import AbstractUser, Group
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_comma_separated_integer_list, FileExtensionValidator, RegexValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 from django.db import models
 from django.utils.safestring import mark_safe
 
@@ -50,12 +50,12 @@ class User(AbstractUser):
 
     class Meta:
         ordering = ['id']
-        verbose_name = 'Клиент'
-        verbose_name_plural = 'Клиенты'
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
 
 class ProxyGroups(Group):
     class Meta:
         proxy = True
-        verbose_name = 'Права пользователей'
-        verbose_name_plural = 'Права пользователей'
+        verbose_name = 'Группа'
+        verbose_name_plural = 'Группы'
