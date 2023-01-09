@@ -23,5 +23,7 @@ class UserAdmin(UserAdmin):
 
     filter_horizontal = ("groups", "user_permissions")
 
-    list_display = ['get_full_name', 'email', 'phone', 'get_image_avatar',
-                    'avatar', "is_active", "is_staff", "is_superuser", 'id']
+    list_display = ['id', 'get_full_name', 'email', 'phone', 'get_image_avatar',
+                    'avatar', "is_active", "is_staff", ]
+
+    list_editable = ["is_active", ]
