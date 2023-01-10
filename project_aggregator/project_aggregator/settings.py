@@ -144,37 +144,37 @@ DATE_INPUT_FORMATS = [
 
 CART_SESSION_ID = 'cart'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'console': {
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-        },
-        'file': {
-            'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-            'encoding': 'utf8',
-        }
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'console'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'file',
-            'filename': 'debug.log'
-        }
-    },
-    'loggers': {
-        '': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
-    }
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'console': {
+#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+#         },
+#         'file': {
+#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+#             'encoding': 'utf8',
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'console'
+#         },
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'formatter': 'file',
+#             'filename': 'debug.log'
+#         }
+#     },
+#     'loggers': {
+#         '': {
+#             'level': 'DEBUG',
+#             'handlers': ['console', 'file']
+#         }
+#     }
+# }
 
 FIXTURE_DIRS = [BASE_DIR / "fixtures"]
 
@@ -182,8 +182,10 @@ NUMBER_GROUPING = 3
 
 AUTH_USER_MODEL = 'app_users.User'
 
-LOGIN_URL = '/auth/login/'
+LOGIN_URL = 'login'
 
-LOGIN_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
