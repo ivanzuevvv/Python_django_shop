@@ -20,7 +20,7 @@ class RegUserForm(UserCreationForm):
                    'maxlength': '150'}))
     full_name = forms.CharField(
         max_length=254, required=True, widget=forms.TextInput(
-            attrs={'class': 'form-input', 'data-validate': 'require', 'placeholder': 'Введите ФИО',
+            attrs={'class': 'form-input', 'data-validate': 'require', 'placeholder': 'Введите Фамилию Имя Отчество',
                    'maxlength': '254'}))
     email = forms.EmailField(
         max_length=254, label='e-mail', required=True, widget=forms.TextInput(
@@ -33,4 +33,4 @@ class RegUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('password1', 'password2', 'email', 'phone')
+        fields = ('password1', 'password2', 'email', 'phone', 'avatar', 'full_name')

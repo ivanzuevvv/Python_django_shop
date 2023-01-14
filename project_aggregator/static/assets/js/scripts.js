@@ -820,14 +820,14 @@ $(document).ready(function() {
                 // если успешно, то
                 success: function (response) {
                     if (response.is_taken == true) {
-                        $('#id_phoneNumber').removeClass('is-valid').addClass('is-invalid');
-                        $('#id_phoneNumber').next('.form-error').remove();
+                        $('#id_phone').removeClass('is-valid').addClass('is-invalid');
+                        $('#id_phone').next('.form-error').remove();
                         if (!$("#phoneError").length){
-                          $('#id_phoneNumber').after('<div class="invalid-feedback d-block" id="phoneError">Пользователь с таким номером уже зарегистрирован</div>')
+                          $('#id_phone').after('<div class="invalid-feedback d-block" id="phoneError">Пользователь с таким номером уже зарегистрирован</div>')
                         }
                     }
                     else {
-                        $('#id_phoneNumber').removeClass('is-invalid').addClass('is-valid');
+                        $('#id_phone').removeClass('is-invalid').addClass('is-valid');
                         $('#phoneError').remove();
                     }
                 },
@@ -856,14 +856,15 @@ $(document).ready(function() {
         });
     }
 
-    $('#id_phoneNumber').inputmask({ mask: "+7(999)99-99-999", removeMaskOnSubmit: true, autoUnmask: true});
+    // $('#id_phoneNumber').inputmask({ mask: "+7(999)99-99-999", removeMaskOnSubmit: true, autoUnmask: true});
+    $('#id_phone').inputmask({ mask: "+7(999)999-99-99", removeMaskOnSubmit: true, autoUnmask: true});
 
     //card mask
-    $('#id_card_number').inputmask({ mask: "9999-9999", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
+    $('#id_card_number').inputmask({ mask: "xx-xx-xx-xx", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
 
     //email mask
     $('#id_email, #id_username').inputmask({
-      mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+      mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,10}.[*{2,6}]",
       greedy: false,
       onBeforePaste: function (pastedValue, opts) {
         pastedValue = pastedValue.toLowerCase();

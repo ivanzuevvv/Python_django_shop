@@ -9,7 +9,7 @@
                 <h1 class="Middle-title">Регистрация
                 </h1>
                 <ul class="breadcrumbs Middle-breadcrumbs">
-                    <li class="breadcrumbs-item"><a href="/">назад</a>
+                    <li class="breadcrumbs-item"><a href="{% url 'main' %}">назад</a>
                     </li>
                     <li class="breadcrumbs-item breadcrumbs-item_current"><span>Регистрация</span>
                     </li>
@@ -27,11 +27,8 @@
                     <div class="Section-columnContent">
                         <div class="NavigateProfile">
                             <ul class="menu menu_vt">
-                                <li class="menu-item"><a class="menu-link" href="{% url 'login' %}">Вход</a>
-                                </li>
-                                <li class="menu-item"><a class="menu-link"
-                                                         href="{% url 'registration' %}">Регистрация</a>
-                                </li>
+                                <li class="menu-item"><a class="menu-link" href="{% url 'main' %}">Главная страница</a></li>
+                                <li class="menu-item"><a class="menu-link" href="{% url 'login' %}">Вход</a></li>
                             </ul>
                         </div>
                     </div>
@@ -63,8 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form.full_name.id_for_full_name }}">ФИО
-                                    </label>
+                                    <label class="form-label" for="{{ form.full_name.id_for_full_name }}">Фамилия Имя Отчество</label>
                                     {{ form.full_name }}
                                     {% if form.full_name.errors %}
                                         {% for error in form.full_name.errors %}
@@ -75,8 +71,7 @@
                             </div>
                             <div class="row-block">
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form.email.id_for_email }}">E-mail
-                                    </label>
+                                    <label class="form-label" for="{{ form.email.id_for_email }}">Электронная почта</label>
                                     {{ form.email }}
                                     {% if form.email.errors %}
                                         {% for error in form.email.errors %}
@@ -85,8 +80,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form.phone.id_for_phone }}">Телефон
-                                    </label>
+                                    <label class="form-label" for="{{ form.phone.id_for_phone }}">Телефон</label>
                                     {{ form.phone }}
                                     {% if form.phone.errors %}
                                         {% for error in form.phone.errors %}
@@ -95,8 +89,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form.password1.id_for_password1 }}">Пароль
-                                    </label>
+                                    <label class="form-label" for="{{ form.password1.id_for_password1 }}">Пароль</label>
                                     {{ form.password1 }}
                                     {% if form.password1.errors %}
                                         {% for error in form.password2.errors %}
@@ -105,9 +98,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form.password2.id_for_password2 }}">
-                                        Подтверждение пароля
-                                    </label>
+                                    <label class="form-label" for="{{ form.password2.id_for_password2 }}">Подтверждение пароля</label>
                                     {{ form.password2 }}
                                     {% if form.password2.errors %}
                                         {% for error in form.password2.errors %}
