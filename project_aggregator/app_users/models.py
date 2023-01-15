@@ -40,6 +40,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.full_name
 
+    @property
+    def welcome_name(self):
+        return ' '.join(self.full_name.split()[1:])
+
     @admin.display(description='Изображение')
     def get_image_avatar(self):
         if self.avatar:

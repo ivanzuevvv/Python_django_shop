@@ -27,7 +27,7 @@ class RegUserForm(UserCreationForm):
             attrs={'class': 'form-input', 'data-validate': 'requireMail', 'maxlength': '254'}))
     phone = forms.CharField(
         required=True, widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'requirePhone'}))
-    avatar = forms.ImageField(required=False, widget=forms.ClearableFileInput(
+    avatar = forms.ImageField(required=False, widget=forms.FileInput(
         attrs={'class': 'Profile-file form-input', 'type': "file",
                'accept': ".jpg,.gif,.png", 'data-validate': "onlyImgAvatar"}))
 

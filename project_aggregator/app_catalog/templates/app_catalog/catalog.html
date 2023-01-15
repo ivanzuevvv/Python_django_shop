@@ -1,4 +1,4 @@
-{% extends "app_shop/base.html" %}
+{% extends "app_catalog/base.html" %}
 {% load static %}
 {% load thumbnail %}
 
@@ -124,7 +124,7 @@
                     <div class="Pagination-ins">
                         <a class="Pagination-element Pagination-element_prev"
                            href="?page=1">
-                            <img src="{% static 'assets/img/icons/prevPagination.svg'%}" alt="Первая страница"/></a>
+                            <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="Первая страница"/></a>
                         {% if page_obj.has_previous %}
                         {% with page_num=page_obj.previous_page_number|add:-1 %}
                         {% if page_num > 0 %}
@@ -152,7 +152,7 @@
                         {% endif %}
                         <a class="Pagination-element Pagination-element_prev"
                            href="?page={{ page_obj.paginator.num_pages }}">
-                            <img src="{% static 'assets/img/icons/nextPagination.svg'%}" alt="Последняя страница"/></a>
+                            <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="Последняя страница"/></a>
                     </div>
                 </div>
             </div>
