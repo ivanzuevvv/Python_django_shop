@@ -10,18 +10,22 @@ admin.site.register(ProxyGroups)
 
 
 @admin.register(User)
-class UserAdmin(UserAdmin):
-    form = UserChangeForm
+class MyUserAdmin(UserAdmin):
+    ordering = ("id",)
     fieldsets = (
         (None, {"fields": ("email", 'phone', "password")}),
-        ("Личная информация", {"fields": ("last_name", "first_name",  "second_name", "avatar")}),
-        ("Права", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
-        ("Важные даты", {"fields": ("last_login", "date_joined")}))
+        ("Личная информация", {"fields": ("full_name", "avatar")}),
+        ("Права", {
+            'classes': ('collapse',),
+            "fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Важные даты", {"fields": ("last_login", 'date_joined')}))
 
     add_fieldsets = (
         (None, {'fields': ("email", 'phone', "password1", "password2")}),)
 
     filter_horizontal = ("groups", "user_permissions")
 
-    list_display = ['get_full_name', 'email', 'phone', 'get_image_avatar',
-                    'avatar', "is_active", "is_staff", "is_superuser", 'id']
+    list_display = ['id', 'full_name', 'email', 'phone', 'get_image_avatar',
+                    'avatar', "is_active", "is_staff", ]
+
+    list_editable = ["is_active", ]
