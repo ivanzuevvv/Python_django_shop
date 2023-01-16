@@ -53,8 +53,8 @@ class TitleProperty(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Наименование характеристики"
-        verbose_name_plural = "Наименования характеристик"
+        verbose_name = "Свойство"
+        verbose_name_plural = "Свойства"
 
 
 class PropertyProduct(models.Model):
