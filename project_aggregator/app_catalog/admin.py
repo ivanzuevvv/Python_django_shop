@@ -30,16 +30,13 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('Характеристики и описание', {
             'classes': ('extrapretty', 'wide'),
-            'fields': ('description', ),
-            # 'fields': ('description', 'properties'),
-            # 'fields': ('description', 'category', 'properties'),
+            'fields': ('description', 'category'),
         }),
         ('Настройки продаж', {
             'classes': ('collapse', 'wide'),
             'fields': (('price', 'stock'), ('available', 'limited'), ),
         }),
     )
-    # filter_horizontal = ['properties']
 
 
 admin.site.register(TitleProperty)

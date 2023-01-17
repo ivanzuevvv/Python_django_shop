@@ -1,11 +1,10 @@
 import transliterate
 from django.db import models
 from django.urls import reverse
-from django.utils.timezone import now
 
 
 class Product(models.Model):
-    # category = models.ForeignKey('app_configurations.Category', on_delete=models.CASCADE, related_name='products', blank=True)
+    category = models.ForeignKey('app_configurations.Category', on_delete=models.CASCADE, related_name='products', blank=True)
     type_device = models.CharField(max_length=50, verbose_name='Тип устройства', default='')
     fabricator = models.CharField(max_length=100, verbose_name='Производитель', default='')
     model = models.CharField(max_length=100, verbose_name='Модель', default='')
@@ -53,8 +52,8 @@ class TitleProperty(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Наименование характеристики"
-        verbose_name_plural = "Наименования характеристик"
+        verbose_name = "Свойство"
+        verbose_name_plural = "Свойства"
 
 
 class PropertyProduct(models.Model):
