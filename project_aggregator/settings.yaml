@@ -1,0 +1,5 @@
+cost_express_delivery: '500.00'
+min_cost_for_free_delivery: '2000.00'
+cost_usual_delivery: '200.00'
+quantity_top_product: 8
+time_cache_data: 1
