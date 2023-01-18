@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import app_configurations.context_processors
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -74,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.contrib.messages.context_processors.messages',
                 'app_catalog.context_processors.load_menu',
+                'app_configurations.context_processors.load_settings',
             ],
         },
     },
