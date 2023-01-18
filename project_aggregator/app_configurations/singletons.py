@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 
@@ -13,5 +14,5 @@ class SingletonModelSettings(models.Model):
     def load(cls):
         try:
             return cls.objects.get()
-        except cls.DoesNotExist:
+        except ObjectDoesNotExist:
             return cls()
