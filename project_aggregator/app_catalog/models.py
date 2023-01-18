@@ -1,10 +1,11 @@
 import transliterate
 from django.db import models
 from django.urls import reverse
+from mptt.fields import TreeForeignKey
 
 
 class Product(models.Model):
-    category = models.ForeignKey('app_configurations.Category', on_delete=models.CASCADE, related_name='products', blank=True)
+    category = TreeForeignKey('app_configurations.Category', on_delete=models.PROTECT, related_name='products')
     type_device = models.CharField(max_length=50, verbose_name='Тип устройства', default='')
     fabricator = models.CharField(max_length=100, verbose_name='Производитель', default='')
     model = models.CharField(max_length=100, verbose_name='Модель', default='')
@@ -22,7 +23,11 @@ class Product(models.Model):
         return f'{self.type_device} {self.fabricator}'
 
     def get_absolute_url(self):
-        return reverse('product_detail', args=[self.pk, self.slug])
+        return reverse('product_detail', args=[self.slug])
+
+    @property
+    def get_full_name(self):
+        return f'{self.type_device} {self.fabricator} {self.model}'
 
     def save(self, *args, **kwargs):
         if not self.slug:
