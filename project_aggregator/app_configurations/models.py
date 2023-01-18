@@ -54,17 +54,18 @@ class SiteSettings(SingletonModelSettings):
         max_digits=10, decimal_places=2, verbose_name='экспресс', help_text='Цена экспресс доставки')
     min_cost_for_free_delivery = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name='Минимум',
-        help_text='Минимальная стоимость бесплатной доставки')
+        help_text='Минимальная сумма для бесплатной доставки')
     root_category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name='Корень каталога',
+        help_text='Начальная категория выпадающего меню',
         related_name='root_category', blank=True, null=True)
     category_main_page = models.ManyToManyField(
         Category, verbose_name='Категории главной страницы', default='', blank=True,
         help_text='Надо выбирать не более 3-х', db_table='app_configurations_category_main_page')
     quantity_top_product = models.PositiveIntegerField(
-        verbose_name='Популярные товаров', default=8, help_text='Количество топ-товаров')
+        verbose_name='Популярные товаров', default=8, help_text='Количество популярных товаров на главной станице')
     time_cache_data = models.PositiveIntegerField(
-        verbose_name='Время кэша данных', default=1, help_text='Кеш данных о товаре')
+        verbose_name='Время кэша данных', default=1, help_text='Кеш хранения данных о товаре в днях')
 
     def __str__(self):
         return 'Конфигурация'
