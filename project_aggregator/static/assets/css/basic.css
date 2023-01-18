@@ -2580,3 +2580,12 @@ button.link {
 .wrap-content {
   margin: 0 auto;
 }
+
+.rub {
+  font-family: arial;
+  vertical-align: middle;
+  border-bottom: 1px solid;
+  line-height: 5px;
+  display: inline-block;
+  width: 0.4em;
+}

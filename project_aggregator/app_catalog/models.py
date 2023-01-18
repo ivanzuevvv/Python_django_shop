@@ -5,7 +5,9 @@ from mptt.fields import TreeForeignKey
 
 
 class Product(models.Model):
-    category = TreeForeignKey('app_configurations.Category', on_delete=models.PROTECT, related_name='products')
+    category = TreeForeignKey(
+        'app_configurations.Category', on_delete=models.PROTECT,
+        related_name='products', verbose_name="Категория товара")
     type_device = models.CharField(max_length=50, verbose_name='Тип устройства', default='')
     fabricator = models.CharField(max_length=100, verbose_name='Производитель', default='')
     model = models.CharField(max_length=100, verbose_name='Модель', default='')
@@ -20,7 +22,7 @@ class Product(models.Model):
     options = models.ManyToManyField('TitleProperty', through='PropertyProduct')
 
     def __str__(self):
-        return f'{self.type_device} {self.fabricator}'
+        return f'{self.type_device} {self.fabricator} {self.model}'
 
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
@@ -63,7 +65,9 @@ class TitleProperty(models.Model):
 
 class PropertyProduct(models.Model):
     title = models.ForeignKey(TitleProperty, on_delete=models.CASCADE, verbose_name='Заголовок')
-    device = models.ForeignKey(Product, related_name='properties', on_delete=models.CASCADE, verbose_name='Устройство')
+    device = models.ForeignKey(
+        Product, related_name='properties', on_delete=models.CASCADE, verbose_name='Устройство', db_index=True,
+    )
     value = models.CharField(max_length=255, verbose_name='Значение характеристики')
 
     def __str__(self):

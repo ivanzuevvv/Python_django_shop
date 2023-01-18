@@ -14,7 +14,9 @@
                             <strong class="BannersHomeBlock-title">{{ category.name }}
                             </strong>
                             <div class="BannersHomeBlock-content">от&#32;<span
-                                    class="BannersHomeBlock-price">{{ category.get_min }}Р</span>
+                                    class="BannersHomeBlock-price">{{ category.get_min|floatformat:2 }}
+                            <span class="rub">Р</span>
+                            </span>
                             </div>
                         </div>
                         <div class="BannersHomeBlock-block">
@@ -41,9 +43,9 @@
                 <div class="Cards">
                     {% for good in products %}
                     <div class="Card">
-                        <a class="Card-picture" href="{{ good.get_absolute_url }}">
+                        <a class="Card-picture" href="#">
                             <img src="
-                            {% thumbnail good.image.first.image '258x172' padding=True as im %}
+                            {% thumbnail good.images.first.image '258x172' padding=True as im %}
                             {{ im.url }}
                             {% empty %}
                             {% static 'assets/img/content/home/card.jpg' %}
@@ -52,7 +54,7 @@
                         </a>
                         <div class="Card-content">
                             <strong class="Card-title">
-                                <a href="{{ good.get_absolute_url }}">
+                                <a href="#">
                                     {{ good.get_full_name }}
                                 </a>
                             </strong>
@@ -60,13 +62,14 @@
                                 <div class="Card-cost">
                                     <span class="Card-price">
                                         {{ good.price }}
+                                        <span class="rub">Р</span>
                                     </span>
                                 </div>
                                 <div class="Card-category">
                                     {{ good.category }}
                                 </div>
                                 <div class="Card-hover">
-                                    <form action="{% url 'cart_add' good.id %}" method="post">
+                                    <form action="#" method="post">
                                         {% csrf_token %}
                                         <a class="Card-btn">
                                             <img src="{% static 'assets/img/icons/cart.svg' %}"
@@ -168,7 +171,9 @@
                                             </a>
                                         </strong>
                                         <div class="Card-description">
-                                            <div class="Card-cost"><span class="Card-price">{{ product.price }}</span>
+                                            <div class="Card-cost"><span class="Card-price">{{ product.price }}
+                                            <span class="rub">Р</span>
+                                            </span>
                                             </div>
                                             <div class="Card-category">{{ product.category }}
                                             </div>

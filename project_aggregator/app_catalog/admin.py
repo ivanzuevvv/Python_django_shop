@@ -23,18 +23,22 @@ class ProductAdmin(admin.ModelAdmin):
     ]
     list_editable = ['price', 'stock', 'available', 'limited']
     prepopulated_fields = {'slug': ('type_device', 'fabricator', 'model')}
-    inlines = [GalleryInline, PropertyInline]
+    inlines = [
+        PropertyInline,
+        GalleryInline,
+    ]
     fieldsets = (
         (None, {
             'fields': (('type_device', 'fabricator', 'model'), 'slug', )
         }),
-        ('Характеристики и описание', {
-            'classes': ('extrapretty', 'wide'),
-            'fields': ('description', 'category'),
-        }),
         ('Настройки продаж', {
-            'classes': ('collapse', 'wide'),
+            'classes': 'wide',
+            # 'classes': ('collapse', 'wide'),
             'fields': (('price', 'stock'), ('available', 'limited'), ),
+        }),
+        ('Категория и описание', {
+            'classes': ('extrapretty', 'wide'),
+            'fields': ('category', 'description',),
         }),
     )
 

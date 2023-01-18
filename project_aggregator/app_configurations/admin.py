@@ -32,5 +32,3 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
-
-"""2/change/"""
