@@ -12,5 +12,6 @@ class AppConfigurationsConfig(AppConfig):
     def ready(self):
         SiteSettings = self.get_model('SiteSettings')
         if ('makemigrations' not in sys.argv) and ('migrate' not in sys.argv):
-            setting_conf = SettingFileLoader(settings.APP_SETTINGS_PATH)
-            SiteSettings.objects.get_or_create(**setting_conf.config)
+            presetting = SettingFileLoader(settings.APP_SETTINGS_PATH)
+            if not SiteSettings.objects.count():
+                SiteSettings.objects.create(**presetting.config)
