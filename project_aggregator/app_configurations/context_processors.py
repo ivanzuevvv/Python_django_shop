@@ -1,5 +1,5 @@
-#from .models import SiteSettings
+from app_configurations.models import SiteSettings
 
 
-#def load_settings(request):
- #   return {'site_settings': SiteSettings.load()}
+def load_settings(request):
+    return {'site_settings': SiteSettings.load()}
