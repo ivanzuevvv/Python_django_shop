@@ -32,17 +32,19 @@ class Category(MPTTModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = transliterate.slugify(self.name)
+            self.slug = transliterate.slugify(str(self.name))
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('show_category', args=[str(self.slug)])
 
-    # def get_min(self):
-    #     sub_categories = self.get_descendants(include_self=True)
-    #     price = Product.objects.values('price').filter(category__in=sub_categories).filter(available=True).aggregate(
-    #         Min('price'))['price__min']
-    #     return price
+    def get_min(self):
+        sub_categories = self.get_descendants(include_self=True)
+        price = (
+            Product.objects.values('price').filter(category__in=sub_categories).
+            filter(available=True).aggregate(Min('price'))['price__min']
+        )
+        return price
 
 
 class SiteSettings(SingletonModelSettings):
