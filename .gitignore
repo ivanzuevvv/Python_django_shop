@@ -2,3 +2,4 @@
 .idea/
 debug.log
 #project_aggregator/media/avatars/
+__pycache__/
