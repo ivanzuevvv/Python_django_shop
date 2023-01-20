@@ -19,9 +19,10 @@ class GalleryInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'type_device', 'fabricator', 'model',
-        'price', 'stock', "created", "updated", 'available', 'limited',
+        'price', 'stock', "created", "updated", "category",
+        'available', 'limited',
     ]
-    list_editable = ['price', 'stock', 'available', 'limited']
+    list_editable = ['price', 'stock', "category", 'available', 'limited']
     prepopulated_fields = {'slug': ('type_device', 'fabricator', 'model')}
     inlines = [
         PropertyInline,
