@@ -19,22 +19,27 @@ class GalleryInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'type_device', 'fabricator', 'model',
-        'price', 'stock', "created", "updated", 'available', 'limited',
+        'price', 'stock', "created", "updated", "category",
+        'available', 'limited',
     ]
-    list_editable = ['price', 'stock', 'available', 'limited']
+    list_editable = ['price', 'stock', "category", 'available', 'limited']
     prepopulated_fields = {'slug': ('type_device', 'fabricator', 'model')}
-    inlines = [GalleryInline, PropertyInline]
+    inlines = [
+        PropertyInline,
+        GalleryInline,
+    ]
     fieldsets = (
         (None, {
             'fields': (('type_device', 'fabricator', 'model'), 'slug', )
         }),
-        ('Характеристики и описание', {
-            'classes': ('extrapretty', 'wide'),
-            'fields': ('description', 'category'),
-        }),
         ('Настройки продаж', {
-            'classes': ('collapse', 'wide'),
+            'classes': 'wide',
+            # 'classes': ('collapse', 'wide'),
             'fields': (('price', 'stock'), ('available', 'limited'), ),
+        }),
+        ('Категория и описание', {
+            'classes': ('extrapretty', 'wide'),
+            'fields': ('category', 'description',),
         }),
     )
 
