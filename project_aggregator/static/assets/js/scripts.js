@@ -976,7 +976,7 @@ $(document).ready(function() {
                     url: JSON.parse(document.getElementById('cart_url').textContent),
                     success: function (response) {
                       $('.CartBlock-amount').html(response.total_len)
-                      $('.CartBlock-price').html(response.total + 'Р')
+                      $('.CartBlock-price').html(response.total + '₽')
                       },
                     })
             }
@@ -1030,10 +1030,10 @@ var Amount = function(){
                         data: {product: product_id},
                         url: JSON.parse(document.getElementById('cart_url').textContent),
                         success: function (response) {
-                          $inputThis.closest('.form').find('#product-price').html(response.total_item)
-                          $('.Cart-total').find('.Cart-price').html(response.total)
+                          $inputThis.closest('.form').find('#product-price').html(response.total_item + '₽')
+                          $('.Cart-total').find('.Cart-price').html(response.total + '₽')
                           $('.CartBlock-amount').html(response.total_len)
-                          $('.CartBlock-price').html(response.total + 'Р')
+                          $('.CartBlock-price').html(response.total + '₽')
                           },
                         })
                     }

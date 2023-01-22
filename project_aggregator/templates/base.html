@@ -3,6 +3,10 @@
 {% url 'main' as main %}
 {% load thumbnail %}
 {% load mptt_tags %}
+{{ cart.get_total_price|json_script:'total_price' }}
+{{ cart|length|json_script:'cart_length'}}
+{% url 'get_cart_data' as cart_url %}
+{{ cart_url|json_script:'cart_url' }}
 <html lang="ru">
 <head>
   {% block head %}
@@ -17,9 +21,10 @@
   <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
   <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
   <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
-  <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}?v=65245665">
-  <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}?v=65245665">
-  <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}?v=65245665">
+  <link rel="stylesheet" href="{% static 'assets/css/toastr.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
   <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
   <script src="{% static 'assets/plg/jQuery/jquery.min.js' %}"></script>
   <script src="{% static 'assets/plg/Toastr/toastr.min.js' %}"></script>
@@ -80,11 +85,13 @@
           </div>
         </nav>
         <div class="row-block">
-          <div class="CartBlock"><a class="CartBlock-block" href="#">
+          <div class="CartBlock"><a class="CartBlock-block" href="{% url 'cart_detail' %}">
               <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}"
-                   alt="cart.svg"/><span class="CartBlock-amount">0</span></a>
+                   alt="cart.svg"/><span class="CartBlock-amount">{{ cart|length }}</span></a>
             <div class="CartBlock-block">
-                <span class="CartBlock-price">0.00</span>
+                <span class="CartBlock-price">{{ cart.get_total_price }}
+{#                    <span class="code-rub">₽</span>#}
+                </span>
             </div>
           </div>
         </div>
@@ -142,7 +149,14 @@
     </div>
   </header>{% endblock %}
   {% block middle %}{% endblock %}
-  {% block footer%}<footer class="Footer">
+  {% block footer%}
+  <footer class="Footer">
+  {% for message in messages %}
+    <script type=text/javascript>
+      toastr.options.positionClass = "toast-bottom-right";
+      toastr.{{ message.tags }}('{{ message }}')
+    </script>>
+  {% endfor %}
     <div class="wrap">
       <div class="row Footer-main">
         <div class="row-block"><a class="logo Footer-logo" href="#"><img class="logo-image" src="{% static 'assets/img/logo_footer.png' %}" alt="logo_footer.png"/></a>
@@ -247,6 +261,6 @@
   <script src="{% static 'assets/plg/inputmask-5.x/jquery.inputmask.js' %}"></script>
 <script src="{% static 'assets/js/scripts.js' %}"></script>
   {% endblock %}
-{#{% debug %}#}
+{% debug %}
 </body>
 </html>
