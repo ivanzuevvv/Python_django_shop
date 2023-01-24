@@ -7,63 +7,37 @@ from app_catalog.models import Product
 
 
 class UserCart(models.Model):
-    owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cart', verbose_name='Пользователь')
-    cart = models.JSONField(verbose_name='Содержание корзины', default=dict)
+    owner = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='cart', verbose_name='Чья корзина', blank=True)
+    session = models.TextField(verbose_name='Сессия', default='')
+    cart = models.ManyToManyField(
+        Product, through='InsideCart', verbose_name='Содержание корзины',
+        related_name="carts", blank=True, null=True)
 
-    def __iter__(self):
-        """
-        Перебор элементов в корзине и получение продуктов из базы данных.
-        """
-        product_ids = self.cart.keys()
-        # получение объектов product и добавление их в корзину
-        products = Product.objects.filter(id__in=product_ids)
-        for product in products:
-            self.cart[str(product.id)]['product'] = product
-
-        for item in self.cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
-            yield item
-
-    def __len__(self):
-        """
-        Подсчет всех товаров в корзине.
-        """
-        return sum(item['quantity'] for item in self.cart.values())
+    def __str__(self):
+        return 'Корзина ' + str(self.owner) if self.owner else 'Anonymous'
 
     def add(self, product, quantity=1, update_quantity=False):
-        """
-        Добавить продукт в корзину или обновить его количество.
-        """
-        product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {
-                'quantity': 0,
-                'price': str(product.price)}
+        cart = InsideCart.objects.get_or_create(
+            user_cart=self, goods=product)[0]
         if update_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            cart.quantity = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
-        self.save()
+            cart.quantity += quantity
+        cart.cost = str(product.price)
+        cart.save()
 
     def remove(self, product):
-        """
-        Удаление товара из корзины.
-        """
-        product_id = str(product.id)
-        if product_id in self.cart:
-            del self.cart[product_id]
-            self.save()
+        self.cart.remove(product)
 
     def get_total_price(self):
-        """
-        Подсчет стоимости товаров в корзине.
-        """
-        return sum(Decimal(item['price']) * item['quantity'] for item in
-                   self.cart.values())
+        return sum(
+            Decimal(item.cost) * item.quantity for item in InsideCart.objects.filter(user_cart=self))
 
-    def clear(self):
-        # удаление корзины
-        self.cart = {}
-        self.save()
+
+class InsideCart(models.Model):
+    user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField(verbose_name='Количество', null=True)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость', null=True)

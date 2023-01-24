@@ -173,10 +173,10 @@ var form = function(){
                     $('#info_delivery').html('Экспресс доставка')
                 }
                 var total_cart = JSON.parse(document.getElementById('total_price').textContent);
-                var str = 'Доставка: ' + delivery + ' руб.';
+                var str = 'Доставка: ' + delivery + '₽';
                 var total = parseFloat(total_cart) + parseFloat(delivery)
                 $('#block_delivery').html(str)
-                $('#total_value').html(total.toString() + ' руб.')
+                $('#total_value').html(total.toString() + '₽')
             });
 
             $('input[name=payment_type]').on('change', function() {
