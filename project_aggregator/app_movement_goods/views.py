@@ -13,10 +13,11 @@ from .session_entities import Cart
 
 @require_POST
 def cart_add(request, pk):
+    print(request.session.__dict__)
     if request.user.is_authenticated:
-        cart = UserCart.objects.get(owner=request.user)
+        cart = UserCart.objects.get_or_create(owner=request.user)[0]
     else:
-        cart = Cart(request)
+        cart = UserCart.objects.get_or_create(session=request.session.session_key)[0]
     product = Product.objects.get(id=pk)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
@@ -42,23 +43,26 @@ class CartDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            cart = UserCart.objects.get(owner=self.request.user)
+            cart = UserCart.objects.get_or_create(owner=self.request.user)[0]
         else:
-            cart = Cart(self.request)
+            cart = UserCart.objects.get_or_create(session=self.request.session.session_key)[0]
         context['cart'] = cart
-        for item in cart:
-            item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'update': True})
-            print(f'item={item} cart={cart.cart}')
+        # for item in cart.contents.all():
+        #     item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'update': True})
+        #     print(f'item={item} cart={cart.cart}')
         return context
 
 
 @require_GET
 def get_cart_data(request):
     product_id = request.GET.get('product', None)
-    cart = Cart(request)
+    if request.user.is_authenticated:
+        cart = UserCart.objects.get_or_create(owner=request.user)[0]
+    else:
+        cart = UserCart.objects.get_or_create(session=request.session.session_key)[0]
     response = {
         'total_len': len(cart),
-        'total': cart.get_total_price()
+        'total': cart.get_total_price
     }
     if product_id:
         product = cart.cart[product_id]
