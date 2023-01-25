@@ -41,7 +41,7 @@ class UserCart(models.Model):
 
 
 class InsideCart(models.Model):
-    user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, related_name='compound')
+    user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, related_name='contents')
     goods = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество', default=0)
     cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость', null=True)
