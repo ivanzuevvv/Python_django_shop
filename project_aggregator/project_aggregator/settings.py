@@ -148,38 +148,8 @@ DATE_INPUT_FORMATS = [
 ]
 
 CART_SESSION_ID = 'cart'
+
 SESSION_COOKIE_AGE = 1209600
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'console': {
-#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-#         },
-#         'file': {
-#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-#             'encoding': 'utf8',
-#         }
-#     },
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'console'
-#         },
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'formatter': 'file',
-#             'filename': 'debug.log'
-#         }
-#     },
-#     'loggers': {
-#         '': {
-#             'level': 'DEBUG',
-#             'handlers': ['console', 'file']
-#         }
-#     }
-# }
 
 FIXTURE_DIRS = [BASE_DIR / "fixtures"]
 
