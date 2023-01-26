@@ -62,8 +62,9 @@ class InsideCart(models.Model):
         return f'{self.product}={self.quantity} шт.'
 
     def save(self, *args, **kwargs):
-        if not self.cost:
-            self.cost = str(self.product.price)
+        # if not self.cost:
+        #     self.cost = str(self.product.price)
+        self.cost = str(self.product.price)
         return super().save(*args, **kwargs)
 
     class Meta:
