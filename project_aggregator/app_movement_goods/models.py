@@ -17,13 +17,13 @@ class UserCart(models.Model):
         related_name="carts", blank=True)
 
     def __str__(self):
-        return 'Корзина ' + str(self.owner.email) if self.owner else 'Anonymous'
+        return 'Корзина ' + str(self.owner.email) if self.owner else 'Корзина Anonymous'
 
     def __len__(self):
         return sum(item.quantity for item in self.contents.only('quantity').all())
 
     def add(self, product, quantity=1, update_quantity=False):
-        cart = self.contents.get_or_create(user_cart=self, goods=product)[0]
+        cart = self.contents.get_or_create(user_cart=self, product=product)[0]
         if update_quantity:
             cart.quantity = quantity
         else:
@@ -49,16 +49,16 @@ class UserCart(models.Model):
 
 class InsideCart(models.Model):
     user_cart = models.ForeignKey(UserCart, on_delete=models.CASCADE, related_name='contents')
-    goods = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товары')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товары')
     quantity = models.PositiveSmallIntegerField(verbose_name='Количество', default=0)
     cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость', null=True)
 
     def __str__(self):
-        return f'{self.goods}={self.quantity} шт.'
+        return f'{self.product}={self.quantity} шт.'
 
     def save(self, *args, **kwargs):
         if not self.cost:
-            self.cost = str(self.goods.price)
+            self.cost = str(self.product.price)
         return super().save(*args, **kwargs)
 
     class Meta:
