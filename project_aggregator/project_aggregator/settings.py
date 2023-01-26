@@ -148,7 +148,7 @@ DATE_INPUT_FORMATS = [
 ]
 
 CART_SESSION_ID = 'cart'
-
+SESSION_COOKIE_AGE = 1209600
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
