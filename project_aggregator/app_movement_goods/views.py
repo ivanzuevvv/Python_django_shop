@@ -8,18 +8,19 @@ from django.views.generic import TemplateView
 from app_catalog.models import Product
 from .forms import CartAddProductForm
 from .models import UserCart
-from .session_entities import Cart
+from .cart import get_cart
 
 
 @require_POST
 def cart_add(request, pk):
-    print(request.session.session_key)
+    # print(request.session.__dict__)
     request.session['product'] = pk
-    print(request.session.__dict__)
-    if request.user.is_authenticated:
-        cart = UserCart.objects.get_or_create(owner=request.user)[0]
-    else:
-        cart = UserCart.objects.get_or_create(session=request.session.session_key)[0]
+    # print(request.session.__dict__)
+    cart = get_cart(request)
+    # if request.user.is_authenticated:
+    #     cart = UserCart.objects.get_or_create(owner=request.user)[0]
+    # else:
+    #     cart = UserCart.objects.get_or_create(session=request.session.session_key)[0]
     product = Product.objects.get(id=pk)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
