@@ -13,9 +13,10 @@ from .cart import get_cart
 
 @require_POST
 def cart_add(request, pk):
-    # print(request.session.__dict__)
+    print('сессия до записи значения', request.session.__dict__)
     request.session['product'] = pk
-    # print(request.session.__dict__)
+    request.session.modified = True
+    print('сессия после записи значения', request.session.__dict__)
     cart = get_cart(request)
     # if request.user.is_authenticated:
     #     cart = UserCart.objects.get_or_create(owner=request.user)[0]
@@ -23,6 +24,7 @@ def cart_add(request, pk):
     #     cart = UserCart.objects.get_or_create(session=request.session.session_key)[0]
     product = Product.objects.get(id=pk)
     form = CartAddProductForm(request.POST)
+    print(form)
     if form.is_valid():
         data = form.cleaned_data
         cart.add(
