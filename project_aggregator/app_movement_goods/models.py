@@ -11,7 +11,7 @@ class UserCart(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
         related_name='cart', verbose_name='Чья корзина', blank=True, null=True)
     session = models.CharField(
-        verbose_name='Сессия', blank=True, null=True, max_length=40)
+        verbose_name='Сессия', default='', max_length=40)
     cart = models.ManyToManyField(
         Product, through='InsideCart', verbose_name='Содержание корзины',
         related_name="carts", blank=True)
