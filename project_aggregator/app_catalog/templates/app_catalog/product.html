@@ -54,7 +54,7 @@
                         <div class="ProductCard-text">
                             {{ product.description|linebreaks }}
                         </div>
-                        <form action="#" id="form_cart" method="post">
+                        <form action="{% url 'cart_add' product.pk %}" id="form_cart" method="post">
                             {% csrf_token %}
                             <div class="ProductCard-cart">
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">

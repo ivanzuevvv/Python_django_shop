@@ -820,14 +820,14 @@ $(document).ready(function() {
                 // если успешно, то
                 success: function (response) {
                     if (response.is_taken == true) {
-                        $('#id_phone').removeClass('is-valid').addClass('is-invalid');
-                        $('#id_phone').next('.form-error').remove();
+                        $('#id_phoneNumber').removeClass('is-valid').addClass('is-invalid');
+                        $('#id_phoneNumber').next('.form-error').remove();
                         if (!$("#phoneError").length){
-                          $('#id_phone').after('<div class="invalid-feedback d-block" id="phoneError">Пользователь с таким номером уже зарегистрирован</div>')
+                          $('#id_phoneNumber').after('<div class="invalid-feedback d-block" id="phoneError">Пользователь с таким номером уже зарегистрирован</div>')
                         }
                     }
                     else {
-                        $('#id_phone').removeClass('is-invalid').addClass('is-valid');
+                        $('#id_phoneNumber').removeClass('is-invalid').addClass('is-valid');
                         $('#phoneError').remove();
                     }
                 },
@@ -856,15 +856,14 @@ $(document).ready(function() {
         });
     }
 
-    // $('#id_phoneNumber').inputmask({ mask: "+7(999)99-99-999", removeMaskOnSubmit: true, autoUnmask: true});
-    $('#id_phone').inputmask({ mask: "+7(999)999-99-99", removeMaskOnSubmit: true, autoUnmask: true});
+    $('#id_phoneNumber').inputmask({ mask: "+7(999)99-99-999", removeMaskOnSubmit: true, autoUnmask: true});
 
     //card mask
-    $('#id_card_number').inputmask({ mask: "xx-xx-xx-xx", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
+    $('#id_card_number').inputmask({ mask: "9999-9999", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
 
     //email mask
     $('#id_email, #id_username').inputmask({
-      mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,10}.[*{2,6}]",
+      mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
       greedy: false,
       onBeforePaste: function (pastedValue, opts) {
         pastedValue = pastedValue.toLowerCase();
@@ -925,17 +924,18 @@ $(document).ready(function() {
                 data: data,
                 cache: true,
                 success: function (response){
-                    if (response.status) {
+                    if (response.code != 1) {
                         $('#error_type').html('Оплата не прошла');
-                        $('#error_info').html(response.status);
-                        if (response.code != 1){
-                            $('#pay_btn').removeClass('btn_disabled');
-                            $('#pay_btn').show();
+                        if (response.status){
+                            $('#error_info').html(response.status);
+                        } else {
+                            $('#error_info').html('Ошибка сервера оплаты');
                         }
-                    }
-                    if (response.code == 1){
-                            $('.Order-info_error').hide();
-                            $('#status').html('Оплачен');
+                        $('#pay_btn').removeClass('btn_disabled');
+                        $('#pay_btn').show();
+                    } else {
+                        $('.Order-info_error').hide();
+                        $('#pay_status').html('Оплачен');
                     }
                 },
                 // если ошибка, то
@@ -1033,7 +1033,7 @@ var Amount = function(){
                           $inputThis.closest('.form').find('#product-price').html(response.total_item)
                           $('.Cart-total').find('.Cart-price').html(response.total)
                           $('.CartBlock-amount').html(response.total_len)
-                          $('.CartBlock-price').html(response.total + 'Р')
+                          $('.CartBlock-price').html(response.total)
                           },
                         })
                     }

@@ -19,13 +19,10 @@ class MyUserAdmin(UserAdmin):
             'classes': ('collapse',),
             "fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Важные даты", {"fields": ("last_login", 'date_joined')}))
-
     add_fieldsets = (
         (None, {'fields': ("email", 'phone', "password1", "password2")}),)
-
     filter_horizontal = ("groups", "user_permissions")
-
-    list_display = ['id', 'full_name', 'email', 'phone', 'get_image_avatar',
+    list_display = ['email', 'phone', 'full_name', 'get_image_avatar',
                     'avatar', "is_active", "is_staff", ]
-
     list_editable = ["is_active", ]
+    list_display_links = ['full_name', 'email']

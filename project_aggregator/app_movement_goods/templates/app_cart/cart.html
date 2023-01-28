@@ -1,4 +1,4 @@
-{% extends "app_catalog/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% block middle %}
 <div class="Middle Middle_top">
@@ -25,15 +25,24 @@
                     <div class="Cart-block Cart-block_row">
                         <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="{{ product.get_absolute_url }}">
                             <img class="Cart-img"
-                                 src='{% if product.image.first %}{{ product.image.first.image.url }}{% else %}{% static "/assets/img/content/home/bigGoods.png" %}{% endif %}'
+                                 src='{% if product.images.first %}{{ product.images.first.image.url }}{% else %}{% static "/assets/img/content/home/bigGoods.png" %}{% endif %}'
                                  alt="good's image"/></a>
                         </div>
-                        <div class="Cart-block Cart-block_info"><a class="Cart-title" href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-                            <div class="Cart-desc">{{ product.description }}
+                        <div class="Cart-block Cart-block_info">
+                            <a class="Cart-title" href="{{ product.get_absolute_url }}">{{ product.get_full_name }}</a>
+                            <br><br>
+{#                            <div class="Cart-desc">{{ product.description|linebreaks }}</div>#}
+                            {% for option in product.properties.all%}
+                            <div class="Product-prop">
+                                <span>{{ option.title }}</span>
+                                <strong>{{ option.value }}</strong>
                             </div>
+                            {% endfor %}
                         </div>
+
                         <div class="Cart-block Cart-block_price">
-                            <div class="Cart-price" id="product-price">{{ item.total_price }}
+                            <div class="Cart-price" id="product-price">{{ item.total_price }}<span class="code-rub">₽</span>
+
                             </div>
                         </div>
                     </div>
@@ -47,7 +56,8 @@
                                     {% csrf_token %}
                                     <button class="Amount-remove" type="button">
                                     </button>
-                                    {{ item.update_quantity_form }}
+                                    <input class="Amount-input form-input" name="amount" type="text" value="{{ item.quantity }}"/>
+{#                                    {{ item.update_quantity_form }}#}
                                     <button class="Amount-add" type="button">
                                     </button>
                                     <input type="hidden" class="product_id" id="product_id" name="product_id"
@@ -67,19 +77,21 @@
             <div class="Cart-total">
                 <div class="Cart-block Cart-block_total">
                     <strong class="Cart-title">Итого:
-                    </strong><span class="Cart-price">{{ cart.get_total_price }} Руб.</span>
+                    </strong><span class="Cart-price">{{ cart.get_total_price }}₽
+{#                    <span class="code-rub">₽</span>#}
+                </span>
                 </div>
                 <div class="Cart-block">
                     {% if cart %}
                     <button class="btn btn_success btn_lg"
                             type="button"
-                            onclick="window.location.href = '{% url 'create_order' %}';">
+                            onclick="window.location.href = '#';">
                         Оформить заказ
                     </button>
                     {% else %}
                     <button class="btn btn_success btn_lg"
                             type="button" disabled
-                            onclick="window.location.href = '{% url 'create_order' %}';">
+                            onclick="window.location.href = '#';">
                         Оформить заказ
                     </button>
                     {% endif %}

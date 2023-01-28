@@ -69,7 +69,7 @@
                                     {{ good.category }}
                                 </div>
                                 <div class="Card-hover">
-                                    <form action="#" method="post">
+                                    <form action="{% url 'cart_add' good.id %}" method="post">
                                         {% csrf_token %}
                                         <a class="Card-btn">
                                             <img src="{% static 'assets/img/icons/cart.svg' %}"
@@ -178,7 +178,7 @@
                                             <div class="Card-category">{{ product.category }}
                                             </div>
                                             <div class="Card-hover">
-                                                <form action="#" method="post">
+                                                <form action="{% url 'cart_add' product.id %}" method="post">
                                                     {% csrf_token %}
                                                     <a class="Card-btn">
                                                         <img src="{% static 'assets/img/icons/cart.svg' %}"

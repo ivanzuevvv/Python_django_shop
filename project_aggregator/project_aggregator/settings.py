@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'app_catalog.context_processors.load_menu',
                 'app_configurations.context_processors.load_settings',
+                'app_movement_goods.context_processors.cart',
             ],
         },
     },
@@ -149,37 +150,7 @@ DATE_INPUT_FORMATS = [
 
 CART_SESSION_ID = 'cart'
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'console': {
-#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-#         },
-#         'file': {
-#             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-#             'encoding': 'utf8',
-#         }
-#     },
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'console'
-#         },
-#         'file': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'formatter': 'file',
-#             'filename': 'debug.log'
-#         }
-#     },
-#     'loggers': {
-#         '': {
-#             'level': 'DEBUG',
-#             'handlers': ['console', 'file']
-#         }
-#     }
-# }
+SESSION_COOKIE_AGE = 1209600
 
 FIXTURE_DIRS = [BASE_DIR / "fixtures"]
 
