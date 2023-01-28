@@ -1,13 +1,12 @@
 from decimal import Decimal
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.views.decorators.http import require_POST, require_GET
 from django.views.generic import TemplateView
 
 from app_catalog.models import Product
 from .forms import CartAddProductForm
-from .models import UserCart
 from .cart import get_cart
 
 
@@ -16,7 +15,6 @@ def cart_add(request, pk):
     cart = get_cart(request)
     product = get_object_or_404(Product, id=pk)
     form = CartAddProductForm(request.POST)
-    # print(form)
     if form.is_valid():
         data = form.cleaned_data
         cart.add(
@@ -40,12 +38,7 @@ class CartDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_cart(self.request)
-        # cart_dict = {}
-        # for item in cart:
-        #     item['update_quantity_form'] = CartAmountForm(initial={'quantity': item['quantity'], 'update': True})
-        #     print(f'item={item["update_quantity_form"]}')
         context['cart'] = cart
-        # context['cart_dict'] = cart_dict
         return context
 
     """

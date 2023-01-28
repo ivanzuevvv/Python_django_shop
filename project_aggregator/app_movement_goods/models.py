@@ -30,8 +30,6 @@ class UserCart(models.Model):
                 'product': item.product,
                 'quantity': item.quantity,
                 'price': item.cost,
-                # 'update_quantity_form': CartAddProductForm(
-                #     initial={'quantity': item.quantity, 'update': True})
             }
             yield data
 
