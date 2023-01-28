@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="Cart-block Cart-block_price">
-                            <div class="Cart-price" id="product-price">{{ item.total_price }}
+                            <div class="Cart-price" id="product-price">{{ item.total_price }}₽
 {#                                <span class="code-rub">₽</span>#}
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                     {% csrf_token %}
                                     <button class="Amount-remove" type="button">
                                     </button>
-                                    {{ item.update_quantity_form }}
+                                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
                                     <button class="Amount-add" type="button">
                                     </button>
                                     <input type="hidden" class="product_id" id="product_id" name="product_id"
@@ -76,7 +76,7 @@
             <div class="Cart-total">
                 <div class="Cart-block Cart-block_total">
                     <strong class="Cart-title">Итого:
-                    </strong><span class="Cart-price">{{ cart.get_total_price }}
+                    </strong><span class="Cart-price">{{ cart.get_total_price }}₽
 {#                    <span class="code-rub">₽</span>#}
                 </span>
                 </div>

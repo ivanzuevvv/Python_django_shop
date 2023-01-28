@@ -22,6 +22,15 @@ class UserCart(models.Model):
     def __len__(self):
         return sum(item.quantity for item in self.contents.only('quantity').all())
 
+    def __iter__(self):
+        for item in self.contents.all():
+            data = {
+                'total_price': item.cost * item.quantity,
+                'product': item.product,
+                'quantity': item.quantity,
+                'price': item.cost}
+            yield data
+
     def add(self, product, quantity=1, update_quantity=False):
         cart = self.contents.get_or_create(user_cart=self, product=product)[0]
         if update_quantity:
