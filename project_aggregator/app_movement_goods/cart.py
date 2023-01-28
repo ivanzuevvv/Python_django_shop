@@ -2,19 +2,24 @@ from .models import UserCart
 
 
 def get_cart(request):
-    # print("session=", request.session.__dict__)
+    print("session=", request.session.__dict__)
     user = request.user
-    session = request.session.session_key
-    # print('session_key=', session)
-    if not session:
+    session_key = request.session.session_key
+    if not session_key:
         request.session.cycle_key()
-        session = request.session.session_key
-        # print('создали session_key=', session)
-    data = UserCart.objects.prefetch_related('contents__product').get_or_create(session=session)[0]
-    if user.is_authenticated:
-        cart = UserCart.objects.prefetch_related('contents__product').get_or_create(owner=user)[0]
-        cart.add_cart(data)
+        session_key = request.session.session_key
+        print('создали session_key=', session_key)
+    if not user.is_authenticated:
+        cart = UserCart.objects.prefetch_related('contents__product').get_or_create(session=session_key)[0]
+        no_user_cart_id = cart.id
     else:
-        cart = data
+        print(no_user_cart_id)
+        cart = UserCart.objects.prefetch_related('contents__product').get_or_create(owner=user)[0]
+        try:
+            data = UserCart.objects.prefetch_related('contents__product').get(pk=no_user_cart_id)
+        except Exception:
+            print('Корзины не было')
+        else:
+            cart.add_cart(data)
     # print('словарь корзины=', cart.__dict__)
     return cart

@@ -42,8 +42,8 @@ class CartDetailView(TemplateView):
         cart = get_cart(self.request)
         # cart_dict = {}
         # for item in cart:
-        #     item['update_quantity_form'] = CartAddProductForm()
-        #     print(f'item={item}')
+        #     item['update_quantity_form'] = CartAmountForm(initial={'quantity': item['quantity'], 'update': True})
+        #     print(f'item={item["update_quantity_form"]}')
         context['cart'] = cart
         # context['cart_dict'] = cart_dict
         return context

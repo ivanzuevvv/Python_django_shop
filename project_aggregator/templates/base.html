@@ -89,9 +89,7 @@
               <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}"
                    alt="cart.svg"/><span class="CartBlock-amount">{{ cart|length }}</span></a>
             <div class="CartBlock-block">
-                <span class="CartBlock-price">{{ cart.get_total_price }}₽
-{#                    <span class="code-rub">₽</span>#}
-                </span>
+                <span class="CartBlock-price">{{ cart.get_total_price }}<span class="code-rub">₽</span></span>
             </div>
           </div>
         </div>
@@ -261,6 +259,6 @@
   <script src="{% static 'assets/plg/inputmask-5.x/jquery.inputmask.js' %}"></script>
 <script src="{% static 'assets/js/scripts.js' %}"></script>
   {% endblock %}
-{#{% debug %}#}
+{% debug %}
 </body>
 </html>

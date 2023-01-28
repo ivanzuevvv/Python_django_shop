@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 
 from app_catalog.models import Product
+from .forms import CartAddProductForm
 
 
 class UserCart(models.Model):
@@ -28,7 +29,10 @@ class UserCart(models.Model):
                 'total_price': item.cost * item.quantity,
                 'product': item.product,
                 'quantity': item.quantity,
-                'price': item.cost}
+                'price': item.cost,
+                # 'update_quantity_form': CartAddProductForm(
+                #     initial={'quantity': item.quantity, 'update': True})
+            }
             yield data
 
     def add(self, product, quantity=1, update_quantity=False):
@@ -41,9 +45,10 @@ class UserCart(models.Model):
         cart.save()
 
     def add_cart(self, cart):
-        for goods in cart.contents.all():
-            self.add(goods.product, goods.quantity)
-        cart.clear()
+        if cart:
+            for goods in cart.contents.all():
+                self.add(goods.product, goods.quantity)
+            cart.clear()
 
     def remove(self, product):
         self.cart.remove(product)
