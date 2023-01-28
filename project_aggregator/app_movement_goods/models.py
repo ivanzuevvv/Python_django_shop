@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from app_catalog.models import Product
-from .forms import CartAddProductForm
 
 
 class UserCart(models.Model):
@@ -74,8 +74,6 @@ class InsideCart(models.Model):
         return f'{self.product}={self.quantity} шт.'
 
     def save(self, *args, **kwargs):
-        # if not self.cost:
-        #     self.cost = str(self.product.price)
         self.cost = str(self.product.price)
         return super().save(*args, **kwargs)
 
@@ -84,15 +82,57 @@ class InsideCart(models.Model):
         verbose_name_plural = "Товары"
 
 
-"""
-from app_movement_goods.models import UserCart
-from app_catalog.models import Product
-from app_users.models import User
-user1 = User.objects.get(pk=9)
-user2 = User.objects.get(pk=12)
-prod1 = Product.objects.get(pk=10)
-prod2 = Product.objects.get(pk=15)
-prod3 = Product.objects.get(pk=23)
-cart1 = UserCart.objects.get_or_create(owner=user1)[0]
-cart2 = UserCart.objects.get_or_create(owner=user2)[0]
-"""
+class Order(models.Model):
+    DELIVERY_CHOICES = (
+        ("1", "Обычная доставка"),
+        ("2", "Экспресс доставка"),)
+
+    PAYMENT_CHOICES = (
+        ("1", "Онлайн картой"),
+        ("2", "Онлайн со случайного чужого счета"),)
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Изменен')
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='order', on_delete=models.CASCADE, verbose_name='Чей заказ')
+    city = models.CharField(max_length=100, verbose_name='Город')
+    address = models.CharField(max_length=250, verbose_name='Адрес')
+    delivery_type = models.CharField(
+        max_length=1, choices=DELIVERY_CHOICES, verbose_name='Тип доставки', default="1")
+    payment_type = models.CharField(
+        max_length=1, choices=PAYMENT_CHOICES, verbose_name='Тип оплаты', default="1")
+    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена доставки', default=0)
+    paid = models.BooleanField(default=False, verbose_name='оплачен')
+    card_number = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(10000000), MaxValueValidator(99999999)], verbose_name='Номер карты')
+    status = models.CharField(max_length=150, verbose_name='статус платежа', blank=True, null=True)
+    payment_code = models.IntegerField(default=0, verbose_name='Код оплаты')
+    structure = models.OneToOneField(
+        'OrderContents', on_delete=models.CASCADE, verbose_name='Содержание заказа', related_name='order')
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    def __str__(self):
+        return 'Заказ {}'.format(self.id)
+
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.items.all()) + self.delivery_price
+
+
+class OrderContents(models.Model):
+    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE, verbose_name='товар')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='цена')
+    quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    def get_cost(self):
+        return self.price * self.quantity
+
+    class Meta:
+        verbose_name = "Товары"
+        verbose_name_plural = "Товары"
