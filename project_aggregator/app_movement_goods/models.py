@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
+from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -101,38 +102,44 @@ class Order(models.Model):
         max_length=1, choices=DELIVERY_CHOICES, verbose_name='Тип доставки', default="1")
     payment_type = models.CharField(
         max_length=1, choices=PAYMENT_CHOICES, verbose_name='Тип оплаты', default="1")
-    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена доставки', default=0)
-    paid = models.BooleanField(default=False, verbose_name='оплачен')
     card_number = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(10000000), MaxValueValidator(99999999)], verbose_name='Номер карты')
-    status = models.CharField(max_length=150, verbose_name='статус платежа', blank=True, null=True)
+    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена доставки', default=0)
+    paid = models.BooleanField(default=False, verbose_name='оплачен')
+    status = models.CharField(max_length=150, verbose_name='Ошибки оплаты', blank=True, null=True)
     payment_code = models.IntegerField(default=0, verbose_name='Код оплаты')
-    structure = models.OneToOneField(
-        'OrderContents', on_delete=models.CASCADE, verbose_name='Содержание заказа', related_name='order')
+    structure = models.ManyToManyField(
+        Product, through='OrderContents', verbose_name='Содержание заказа', related_name='order')
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ('-created_at',)
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
 
     def __str__(self):
-        return 'Заказ {}'.format(self.id)
+        return f'Заказ {self.owner.email} №{self.id} от {self.created_at.strftime("%d-%m-%Y")}'
 
+    @admin.display(description='Стоимость заказа')
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all()) + self.delivery_price
 
 
 class OrderContents(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE, verbose_name='товар')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='цена')
-    quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
+    quantity = models.PositiveIntegerField(verbose_name='Количество')
 
     def __str__(self):
-        return '{}'.format(self.id)
+        return f'{self.product}={self.quantity} шт.'
 
     def get_cost(self):
         return self.price * self.quantity
 
+    def save(self, *args, **kwargs):
+        self.price = str(self.product.price)
+        return super().save(*args, **kwargs)
+
     class Meta:
-        verbose_name = "Товары"
-        verbose_name_plural = "Товары"
+        verbose_name = "Содержание"
+        verbose_name_plural = "Составы"

@@ -856,10 +856,10 @@ $(document).ready(function() {
         });
     }
 
-    $('#id_phoneNumber').inputmask({ mask: "+7(999)99-99-999", removeMaskOnSubmit: true, autoUnmask: true});
+    $('#id_phoneNumber').inputmask({ mask: "+7(999)999-99-99", removeMaskOnSubmit: true, autoUnmask: true});
 
     //card mask
-    $('#id_card_number').inputmask({ mask: "9999-9999", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
+    $('#id_card_number').inputmask({ mask: "99-99-99-99", removeMaskOnSubmit: true, autoUnmask: true, greedy: false});
 
     //email mask
     $('#id_email, #id_username').inputmask({

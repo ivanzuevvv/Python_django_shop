@@ -7,22 +7,26 @@ class PropertyInline(admin.TabularInline):
     model = PropertyProduct
     verbose_name = 'Характеристики'
     verbose_name_plural = "Характеристики"
+    extra = 0
 
 
 class GalleryInline(admin.TabularInline):
     model = ImageProduct
     verbose_name = "Отображение"
     verbose_name_plural = "Отображения"
+    extra = 0
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    ordering = ["available", 'id']
+    list_filter = ["category", 'available', 'limited']
     list_display = [
-        'id', 'type_device', 'fabricator', 'model',
-        'price', 'stock', "created", "updated", "category",
-        'available', 'limited',
+        'id', 'get_full_name', 'price', 'stock',
+        "created", "updated", 'available', 'limited',
     ]
-    list_editable = ['price', 'stock', "category", 'available', 'limited']
+    list_display_links = ['get_full_name']
+    list_editable = ['price', 'stock', 'available', 'limited']
     prepopulated_fields = {'slug': ('type_device', 'fabricator', 'model')}
     inlines = [
         PropertyInline,

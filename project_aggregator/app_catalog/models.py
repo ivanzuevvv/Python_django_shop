@@ -1,4 +1,5 @@
 import transliterate
+from django.contrib import admin
 from django.db import models
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
@@ -28,6 +29,7 @@ class Product(models.Model):
         return reverse('product_detail', args=[self.slug])
 
     @property
+    @admin.display(description='Наименование')
     def get_full_name(self):
         return f'{self.type_device} {self.fabricator} {self.model}'
 
