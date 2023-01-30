@@ -104,7 +104,7 @@ class OrderView(FormMixin, TemplateView):
         if form.is_valid():
             order = form.save(commit=False)
             order.data = form.cleaned_data
-            order.user = request.user
+            order.owner = request.user
             order.delivery_price = get_delivery_price(
                 total=cart.get_total_price, type_delivery=form.cleaned_data['delivery_type'])
             objs = list()
