@@ -45,3 +45,8 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.info(self.request, "Профиль успешно сохранен")
         return super(ProfileView, self).form_valid(form)
+
+
+class OrderRegView(RegistrationView):
+    success_url = reverse_lazy('create_order')
+
