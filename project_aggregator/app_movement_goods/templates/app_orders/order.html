@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="row-block">
                                 <div class="form-group">
-                                    <label class="form-label" for="{{ form_reg.full_name.id_for_full_name }}">Фамилия Имя Отчество
+                                    <label class="form-label" for="{{ form_reg.full_name.id_for_full_name }}">Пользователь
                                     </label>
                                     {{ form_reg.full_name }}
                                     {% for error in form_reg.full_name.errors %}
@@ -259,11 +259,11 @@
                                         </div>
                                         <div class="Cart-block Cart-block_info">
                                             <a class="Cart-title" href="{{ item.product.get_absolute_url }}">
-                                                {{ item.product.name }}
+                                                {{ item.product.get_full_name }}
                                             </a>
                                             <div class="Cart-desc">
 {#                                                {{ item.product.description }}#}
-                                            {% for option in product.properties.all %}
+                                            {% for option in item.product.properties.all %}
                                             <div class="Product-prop">
                                                 <strong>{{ option.title }}
                                                 </strong><span> {{ option.value }}</span>
