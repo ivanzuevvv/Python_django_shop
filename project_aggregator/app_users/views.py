@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
+from django.views import generic
 from django.views.generic import CreateView, UpdateView
 
 from .forms import RegUserForm
@@ -50,3 +51,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class OrderRegView(RegistrationView):
     success_url = reverse_lazy('create_order')
 
+
+class AccountView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'app_users/account.html'
+    raise_exception = True
