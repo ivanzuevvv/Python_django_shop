@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'app_comments',
     'app_configurations',
     'app_movement_goods',
-    'app_orders',
     'app_payments',
     'app_users',
 ]
