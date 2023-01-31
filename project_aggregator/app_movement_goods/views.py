@@ -1,11 +1,13 @@
 from decimal import Decimal
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_GET
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
 from app_catalog.models import Product
@@ -13,7 +15,7 @@ from app_configurations.models import SiteSettings
 from app_users.forms import RegUserForm
 from .forms import CartAddProductForm, OrderCreateForm
 from .cart import get_cart
-from .models import OrderContents
+from .models import OrderContents, Order
 from .utils import get_delivery_price, order_created
 
 
@@ -107,7 +109,7 @@ class OrderView(FormMixin, TemplateView):
             order.owner = request.user
             order.delivery_price = get_delivery_price(
                 total=cart.get_total_price, type_delivery=form.cleaned_data['delivery_type'])
-            objs = list()
+            objs = []
             for item in cart:
                 objs.append(
                     OrderContents(
@@ -121,3 +123,30 @@ class OrderView(FormMixin, TemplateView):
             order_created(order.id)
             return HttpResponseRedirect(reverse('order_detail', args=[order.id]))
         return super().form_invalid(form)
+
+
+class OrderDetail(LoginRequiredMixin, DetailView):
+    template_name = "app_orders/oneorder.html"
+    raise_exception = True
+    model = Order
+    context_object_name = 'order'
+
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner != self.request.user:
+            raise PermissionDenied
+        return object
+
+
+class HistoryOrders(LoginRequiredMixin, ListView):
+    template_name = "app_orders/historyorder.html"
+    raise_exception = True
+    model = Order
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        queryset = (Order.objects.only(
+            'id', 'created_at', 'paid', 'delivery_type', 'payment_type', 'paid', 'status').
+            filter(owner=self.request.user))
+        return queryset
+
