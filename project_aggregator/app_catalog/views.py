@@ -33,11 +33,6 @@ class ShopView(TemplateView):
         return context
 
 
-class AccountView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'app_catalog/account.html'
-    raise_exception = True
-
-
 class ProductDetalView(DetailView):
     model = Product
     template_name = 'app_catalog/product.html'
