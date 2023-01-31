@@ -39,12 +39,12 @@ def order_created(order_id):
     payment_code = order.payment_code
     objs_store = []
     try:
-        for good in order.items.all():
-            store_good = Product.objects.select_for_update().get(id=good.product.id)
-            if good.quantity > store_good.stock:
-                status = f'{good.product.name} недостаточно на складе'
+        for item in order.items.all():
+            store_good = Product.objects.select_for_update().get(id=item.product.id)
+            if item.quantity > store_good.stock:
+                status = f'{item.product.name} недостаточно на складе'
                 raise IntegrityError
-            store_good.stock -= good.quantity
+            store_good.stock -= item.quantity
             objs_store.append(store_good)
         with transaction.atomic():
             if payment_code != 1:
