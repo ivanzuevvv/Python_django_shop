@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.db.models import Sum
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -6,6 +7,7 @@ from django.views import generic
 from django.views.generic import TemplateView, DetailView
 
 from app_configurations.models import SiteSettings
+from app_movement_goods.forms import CartAddProductForm
 from .models import Product
 
 
@@ -38,20 +40,20 @@ class ProductDetalView(DetailView):
     template_name = 'app_catalog/product.html'
     context_object_name = 'product'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['review_form'] = ReviewForm()
-    #     context['form'] = CartAddProductForm(initial={'quantity': 1})
-    #     context['reviews'] = Review.objects.prefetch_related('user').filter(product=self.get_object()).order_by(
-    #         '-created')
-    #     return context
-    #
-    # def get_object(self, queryset=None):
-    #     time_cache = SiteSettings.load().time_cache_product
-    #     if not time_cache:
-    #         time_cache = 1
-    #     return cache.get_or_set(f'product:{self.kwargs.get("pk")}',
-    #                             Product.objects.get(id=self.kwargs.get("pk")), 60 * 60 * time_cache)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['review_form'] = ReviewForm()
+        context['form'] = CartAddProductForm(initial={'quantity': 1})
+        # context['reviews'] = Review.objects.prefetch_related('user').filter(product=self.get_object()).order_by(
+        #     '-created')
+        return context
+
+    def get_object(self, queryset=None):
+        time_cache = SiteSettings.load().time_cache_data
+        if not time_cache:
+            time_cache = 1
+        return cache.get_or_set(f'product:{self.kwargs.get("slug")}',
+                                Product.objects.get(slug=self.kwargs.get("slug")), 60 * 60 * time_cache)
     #
     # def post(self, request, pk, slug):
     #     form = ReviewForm(request.POST)
