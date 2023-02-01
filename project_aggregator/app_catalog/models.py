@@ -1,4 +1,5 @@
 import transliterate
+from django.contrib import admin
 from django.db import models
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
@@ -19,6 +20,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name='Обновлен')
     available = models.BooleanField(default=True, verbose_name='В продаже')
     limited = models.BooleanField(default=False, verbose_name='Ограниченная серия')
+    extra_data = models.ManyToManyField("TitleData", through='ExtraData', verbose_name='Дополнительные данные')
     options = models.ManyToManyField('TitleProperty', through='PropertyProduct')
 
     def __str__(self):
@@ -28,6 +30,7 @@ class Product(models.Model):
         return reverse('product_detail', args=[self.slug])
 
     @property
+    @admin.display(description='Наименование')
     def get_full_name(self):
         return f'{self.type_device} {self.fabricator} {self.model}'
 
@@ -41,6 +44,42 @@ class Product(models.Model):
         index_together = ['slug']
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+
+
+class TitleData(models.Model):
+    title = models.CharField(max_length=100, verbose_name='Заголовок')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Наименование"
+        verbose_name_plural = "Наименования"
+
+
+class ValueData(models.Model):
+    value = models.CharField(max_length=100, verbose_name='Заголовок')
+
+    def __str__(self):
+        return self.value
+
+    class Meta:
+        verbose_name = "Значение"
+        verbose_name_plural = "Значения"
+
+
+class ExtraData(models.Model):
+    title = models.ForeignKey(TitleData, related_name='extradata', on_delete=models.CASCADE, verbose_name="Параметр")
+    device = models.ForeignKey(
+        Product, related_name='extradata', on_delete=models.CASCADE, verbose_name='Устройство', db_index=True,)
+    value = models.ForeignKey(ValueData, related_name='extradata', on_delete=models.CASCADE, verbose_name="Значение")
+
+    def __str__(self):
+        return f'{self.title}: {self.value}'
+
+    class Meta:
+        verbose_name = "Дополнительные данные"
+        verbose_name_plural = "Сведения"
 
 
 class ImageProduct(models.Model):

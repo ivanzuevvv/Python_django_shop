@@ -1,13 +1,22 @@
 from decimal import Decimal
 
-from django.http import JsonResponse
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse
 from django.views.decorators.http import require_POST, require_GET
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic.edit import FormMixin
 
 from app_catalog.models import Product
-from .forms import CartAddProductForm
+from app_configurations.models import SiteSettings
+from app_users.forms import RegUserForm
+from .forms import CartAddProductForm, OrderCreateForm
 from .cart import get_cart
+from .models import OrderContents, Order
+from .utils import get_delivery_price, order_created
 
 
 @require_POST
@@ -41,26 +50,6 @@ class CartDetailView(TemplateView):
         context['cart'] = cart
         return context
 
-    """
-    initial={'quantity': item['quantity'], 'update': True}
-    КартДетал до цикла корзина= {'use_db': False, 'cart': {'21': {'quantity': 3, 'price': '3299.00'}}, 'user': <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001DF11EA0D60>>, 'session': <django.contrib.sessions.backends.db.SessionStore object at 0x000001DF11C1FC10>, 'qs': None}
-цикл item= {'quantity': 3, 'price': Decimal('3299.00'), 'product': <Product: 3.97" Смартфон BQ 4030G Nice Mini 16 ГБ золотистый>, 'total_price': Decimal('9897.00')}
-КартДетал после цикла корзина= {'use_db': False, 'cart': {'21': {'quantity': 3, 'price': Decimal('3299.00'), 'product': <Product: 3.97" Смартфон BQ 4030G Nice Mini 16 ГБ золотистый>, 'total_price': Decimal('9897.00'), 'update_quantity_form': <CartAddProductForm bound=False, valid=Unknown, fields=(quantity;update)>}}, 'user': <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x000001DF11EA0D60>>, 'session': <django.contrib.sessions.backends.db.SessionStore object at 0x000001DF11C1FC10>, 'qs': None}
-
-    """
-
-
-"""
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        cart = Cart(self.request)
-        ctx['cart'] = cart
-        for item in cart:
-            item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'update': True})
-
-        return ctx
-"""
-
 
 @require_GET
 def get_cart_data(request):
@@ -75,3 +64,89 @@ def get_cart_data(request):
         total_item = int(product.quantity) * Decimal(product.cost)
         response['total_item'] = total_item
     return JsonResponse(response)
+
+
+class OrderView(FormMixin, TemplateView):
+    template_name = 'app_orders/order.html'
+    form_class = OrderCreateForm
+    raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart = get_cart(self.request)
+        total_cost = cart.get_total_price
+        choices = []
+        settings = SiteSettings.load()
+        usual_delivery_price = settings.cost_usual_delivery
+        edge_delivery = settings.min_cost_for_free_delivery
+        express_delivery_price = settings.cost_express_delivery
+        context['price_usual'] = 0
+        if total_cost < edge_delivery:
+            choices.append(('1', f'Обычная доставка (+{usual_delivery_price} ₽)'))
+            context['price_usual'] = usual_delivery_price
+        else:
+            choices.append(('1', f'Обычная доставка (бесплатно)'))
+        context['total_with_delivery'] = total_cost + get_delivery_price(total=cart.get_total_price,
+                                                                         type_delivery='1')
+        choices.append(('2', f'Экспресс доставка (+{express_delivery_price} ₽)'))
+        context['form'].fields['delivery_type'].widget.choices = choices
+        if self.request.user.is_authenticated:
+            instance = self.request.user
+            context['form_reg'] = RegUserForm(instance=instance)
+            context['form_reg'].fields['email'].disabled = True
+            context['form_reg'].fields['full_name'].disabled = True
+            context['form_reg'].fields['phone'].disabled = True
+        else:
+            context['form_reg'] = RegUserForm()
+        return context
+
+    def post(self, request):
+        cart = get_cart(request)
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.data = form.cleaned_data
+            order.owner = request.user
+            order.delivery_price = get_delivery_price(
+                total=cart.get_total_price, type_delivery=form.cleaned_data['delivery_type'])
+            objs = []
+            for item in cart:
+                objs.append(
+                    OrderContents(
+                        order=order, product=item['product'],
+                        price=item['price'], quantity=item['quantity']))
+            order.save()
+            OrderContents.objects.bulk_create(objs)
+            cart.clear()
+            messages.success(request, 'Заказ успешно добавлен.')
+            messages.info(request, 'Ждём подтверждения оплаты от платёжной системы.')
+            order_created(order.id)
+            return HttpResponseRedirect(reverse('order_detail', args=[order.id]))
+        return super().form_invalid(form)
+
+
+class OrderDetail(LoginRequiredMixin, DetailView):
+    template_name = "app_orders/oneorder.html"
+    raise_exception = True
+    model = Order
+    context_object_name = 'order'
+
+    def get_object(self, queryset=None):
+        object = super().get_object(queryset)
+        if object.owner != self.request.user:
+            raise PermissionDenied
+        return object
+
+
+class HistoryOrders(LoginRequiredMixin, ListView):
+    template_name = "app_orders/historyorder.html"
+    raise_exception = True
+    model = Order
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        queryset = (Order.objects.only(
+            'id', 'created_at', 'paid', 'delivery_type', 'payment_type', 'paid', 'status').
+            filter(owner=self.request.user))
+        return queryset
+

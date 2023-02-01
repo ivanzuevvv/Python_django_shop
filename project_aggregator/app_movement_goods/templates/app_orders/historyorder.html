@@ -1,4 +1,4 @@
-{% extends "app_catalog/base.html" %}
+{% extends "base.html" %}
 {% block middle %}
 <div class="Middle Middle_top">
     <div class="Middle-top">
@@ -52,7 +52,7 @@
                                         </span>
                                         &#32;от&#32;
                                         <span class="Order-dateOrder">
-                                            {{ order.created|date:"d.m.Y" }}
+                                            {{ order.created_at|date:"d.m.Y" }}
                                         </span>
                                     </a>
                                 </div>
