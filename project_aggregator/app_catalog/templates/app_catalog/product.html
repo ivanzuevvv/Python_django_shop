@@ -54,8 +54,8 @@
                         <div class="ProductCard-text">
                             {{ product.description|linebreaks }}
                         </div>
-                        <form action="{% url 'cart_add' product.pk %}" id="form_cart" method="post">
-                            {% csrf_token %}
+                        <form action="{% url 'cart_add' product.id %}" id="form_cart" method="post">
+<!--                        <form action="{% url 'cart_add' product.pk %}" id="form_cart" method="post">-->
                             <div class="ProductCard-cart">
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                                     <div class="Amount Amount_product">
@@ -66,7 +66,9 @@
                                         </button>
                                     </div>
                                 </div>
+
                                 <div class="ProductCard-cartElement">
+                                    {% csrf_token %}
                                     <button class="btn btn_primary" type="submit" id="btn-submit"><img
                                             class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                             alt="cart_white.svg"/><span class="btn-content">В корзину</span></button>
