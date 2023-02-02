@@ -1,8 +1,8 @@
-import random
-
-from app_movement_goods.models import UserCart
-from app_catalog.models import Product, ExtraData, ValueData, TitleData
-from app_users.models import User
+# import random
+#
+# from app_movement_goods.models import UserCart
+# from app_catalog.models import Product, ExtraData, ValueData, TitleData
+# from app_users.models import User
 
 # user1 = User.objects.get(pk=9)
 # user2 = User.objects.get(pk=12)
@@ -24,3 +24,16 @@ from app_users.models import User
 #     ExtraData.objects.create(title=list_title[0], device=prod, value=country)
 #     ExtraData.objects.create(title=list_title[1], device=prod, value=types)
 #     ExtraData.objects.create(title=list_title[2], device=prod, value=term)
+
+# from app_users.models import User
+# for user in ['zea@crid.ru',
+# 'peter@cho.za',
+# 'chtoto@za.pochta',
+# 'valid@me.co',
+# 'sova@cho.za',
+# 'ulyba@cho.za',
+# '123@cho.za',
+# 'kot@na.oborot']:
+#     user = User.objects.get(email=user)
+#     user.set_password('1234')
+#     user.save()
