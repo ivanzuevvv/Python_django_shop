@@ -85,13 +85,15 @@
                                             <div class="Order-info">
                                                 <div class="Order-infoType">Общая стоимость:
                                                 </div>
-                                                <div class="Order-infoContent">{{ order.get_total_cost }} Руб.
+                                                <div class="Order-infoContent">{{ order.get_total_cost }} <span class="code-rub">₽</span>
                                                 </div>
                                             </div>
                                             <div class="Order-info Order-info_status">
                                                 <div class="Order-infoType">Статус:
                                                 </div>
-                                                <div class="Order-infoContent">{% if order.paid %} Оплачен {% else %} Не оплачен {% endif %}
+                                                <div class="Order-infoContent">
+                                             {% if order.paid %} <p style="color:#3cb878;">Оплачен</p>
+                                             {% else %} <p style="color:#f26d7d;">Не оплачен</p> {% endif %}
                                                 </div>
                                             </div>
                                         </div>

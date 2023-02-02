@@ -33,7 +33,7 @@ def get_delivery_price(total, type_delivery):
 
 
 def order_created(order_id):
-    # time.sleep(5)
+    # time.sleep(2)
     order = Order.objects.get(id=order_id)
     status = ''
     payment_code = order.payment_code

@@ -86,7 +86,8 @@
                                         <div class="Order-infoType" id="status">Статус:
                                         </div>
                                         <div class="Order-infoContent" id="pay_status">
-                                            {% if order.paid %} <p style="color:green;">Оплачен</p> {% else %} <p style="color:red;">Не оплачен</p> {% endif %}
+                                             {% if order.paid %} <p style="color:#3cb878;">Оплачен</p>
+                                             {% else %} <p style="color:#f26d7d;">Не оплачен</p> {% endif %}
                                         </div>
                                     </div>
                                     {% if not order.paid %}
@@ -118,9 +119,11 @@
                                     <div class="Cart-block Cart-block_pict">
                                         <a class="Cart-pict" href="{{ item.product.get_absolute_url }}">
                                             <img class="Cart-img"
-                                                 src="{% if item.product.images.first.image %} {{ item.product.images.first.image.url }} {% else %} {% static 'assets/img/content/home/card.jpg' %} {% endif %}"
-                                                 alt="изображение товара"/>
-                                        </a>
+                                                 src="{% if item.product.images.first.image %}
+                                                            {{ item.product.images.first.image.url }}
+                                                      {% else %}
+                                                            {% static 'assets/img/content/home/card.jpg' %}
+                                                      {% endif %}" alt="изображение товара"/></a>
                                     </div>
                                     <div class="Cart-block Cart-block_info">
                                         <a class="Cart-title" href="{{ item.product.get_absolute_url }}">
@@ -154,14 +157,16 @@
                                     <div class="Cart-block Cart-block_delivery" id="block_delivery">
                                         Доставка: {{order.delivery_price }}<span class="code-rub">₽</span>
                                     </div>
-                                    <strong class="Cart-title">Итого:<span class="Cart-price">{{ order.get_total_cost }} Руб.</span>
+                                    <strong class="Cart-title">Итого:
+                                        <span class="Cart-price">{{ order.get_total_cost }} <span class="code-rub">₽</span></span>
                                     </strong>
                                 </div>
+                                {% if not order.paid %}
                                 <div class="Cart-block">
-                                    <a class="btn btn_primary btn_lg btn_disabled" href="#" id="pay_btn">
+                                    <a class="btn btn_primary btn_lg btn_disabled" href="{% url 'pay' order.id %}" id="pay_btn">
                                         Оплатить
                                     </a>
-                                </div>
+                                </div>{% endif %}
                             </div>
                         </div>
                     </div>

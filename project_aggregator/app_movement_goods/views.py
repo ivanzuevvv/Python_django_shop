@@ -1,3 +1,4 @@
+import time
 from decimal import Decimal
 
 from django.contrib import messages
@@ -120,6 +121,7 @@ class OrderView(FormMixin, TemplateView):
             cart.clear()
             messages.success(request, 'Заказ успешно добавлен.')
             messages.info(request, 'Ждём подтверждения оплаты от платёжной системы.')
+            time.sleep(2)
             order_created(order.id)
             return HttpResponseRedirect(reverse('order_detail', args=[order.id]))
         return super().form_invalid(form)

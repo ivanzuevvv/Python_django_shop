@@ -50,9 +50,8 @@ class OrderCreateForm(forms.ModelForm):
 
 
 class OrderPaymentForm(forms.ModelForm):
-
     card_number = forms.CharField(
-        min_length=8, max_length=9, required=True, label='Номер карты', widget=forms.TextInput(
+        max_length=11, required=True, label='Номер карты', widget=forms.TextInput(
             attrs={
                 'class': 'form-input',
                 'data-validate': 'requireCard'}))
