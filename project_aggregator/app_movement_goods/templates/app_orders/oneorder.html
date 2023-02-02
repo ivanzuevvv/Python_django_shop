@@ -128,7 +128,7 @@
                                         </a>
                                         <div class="Cart-desc">
 <!--                                            {{ item.product.description }}-->
-                                            {% for option in item.product.properties.all %}
+                                            {% for option in item.product.extradata.all %}
                                             <div class="Product-prop">
                                                 <strong>{{ option.title }}
                                                 </strong><span> {{ option.value }}</span>
