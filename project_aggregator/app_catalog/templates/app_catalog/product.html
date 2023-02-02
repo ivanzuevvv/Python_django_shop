@@ -53,7 +53,7 @@
                         </div>
                         <div class="ProductCard-text">
 {#                            {{ product.description|linebreaks }}#}
-                            {% for option in product.properties.all %}
+                            {% for option in product.extradata.all %}
                                 <div class="Product-prop">
                                 <strong>{{ option.title }}
                                 </strong><span> {{ option.value }}</span>
@@ -84,10 +84,10 @@
                     </div>
                 </div>
                 <div class="Tabs Tabs_default">
-                    <div class="Tabs-links"><a class="Tabs-link_ACTIVE Tabs-link"
-                                               href="#description"><span>Описание</span></a><a class="Tabs-link"
-                                                                                               href="#addit"><span>Дополнительно</span></a><a
-                            class="Tabs-link" href="#reviews"><span>Отзывы ({{ product.review.all|length }})</span></a>
+                    <div class="Tabs-links">
+                        <a class="Tabs-link_ACTIVE Tabs-link" href="#description"><span>Описание</span></a>
+                        <a class="Tabs-link" href="#addit"><span>Характеристики</span></a>
+                        <a class="Tabs-link" href="#reviews"><span>Отзывы ({{ product.review.all|length }})</span></a>
                     </div>
                     <div class="Tabs-wrap">
                         <div class="Tabs-block" id="description">
@@ -98,12 +98,11 @@
                                 <h2>{{ product.get_full_name }}</h2>
                                 <p>{{ product.description|linebreaks }}</p>
                             </div>
-
                         </div>
-                        <div class="Tabs-block" id="sellers">
-                            <div class="Categories Categories_product">
-                            </div>
-                        </div>
+<!--                        <div class="Tabs-block" id="sellers">-->
+<!--                            <div class="Categories Categories_product">-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="Tabs-block" id="addit">
                             <div class="Product-props">
                                 {% for option in product.properties.all%}
@@ -117,8 +116,7 @@
                         <div class="Tabs-block" id="reviews">
                             {% if product.review.first %}
                             <header class="Section-header">
-                                <h3 class="Section-title">Количество отзывов: {{ product.review.all|length }}
-                                </h3>
+                                <h3 class="Section-title">Количество отзывов: {{ product.review.all|length }}</h3>
                             </header>
                             {% endif %}
                             <div class="Comments">
