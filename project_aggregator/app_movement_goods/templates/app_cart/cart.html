@@ -32,10 +32,10 @@
                             <a class="Cart-title" href="{{ product.get_absolute_url }}">{{ product.get_full_name }}</a>
                             <br><br>
 {#                            <div class="Cart-desc">{{ product.description|linebreaks }}</div>#}
-                            {% for option in product.properties.all%}
+                            {% for option in product.extradata.all%}
                             <div class="Product-prop">
-                                <span>{{ option.title }}</span>
-                                <strong>{{ option.value }}</strong>
+                                <strong>{{ option.title }}</strong>
+                                <span>{{ option.value }}</span>
                             </div>
                             {% endfor %}
                         </div>
