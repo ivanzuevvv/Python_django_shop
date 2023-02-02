@@ -62,21 +62,3 @@ class ProxyGroups(Group):
         proxy = True
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
-
-
-
-"""
-from app_users.models import User
-for user in ['zea@crid.ru',
-'peter@cho.za',
-'chtoto@za.pochta',
-'valid@me.co',
-'sova@cho.za',
-'ulyba@cho.za',
-'123@cho.za',
-'kot@na.oborot']:
-    user = User.objects.get(email=user)
-    user.set_password('1234')
-    user.save()
-
-"""
