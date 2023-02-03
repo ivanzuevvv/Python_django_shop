@@ -1,11 +1,16 @@
 from django.contrib import admin
+from django.utils.timezone import now, localtime
 
 from app_comments.models import ProxyProduct, CommentProduct
 
 
 @admin.register(CommentProduct)
 class CommentAdmin(admin.ModelAdmin):
-    pass
+
+    def save_model(self, request, obj, form, change):
+        if obj.hide_on:
+            obj.content = f'{obj.content}\n\n Скрыто модератором {request.user.email} {localtime().strftime("%d-%m-%Y %H:%M")}'
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(ProxyProduct)
