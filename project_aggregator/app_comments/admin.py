@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.db import models
+from django.db.models import Count
 from django.forms import Textarea
 from django.utils.timezone import localtime
 
@@ -26,8 +27,8 @@ class CommentProductInline(admin.StackedInline):
     verbose_name_plural = "Отзывы"
     extra = 0
     formfield_overrides = {
-        models.TextField: {'widget': Textarea(attrs={'cols': '100', 'rows': '2'})}
-    }
+        models.TextField: {'widget': Textarea(attrs={'cols': '100', 'rows': '2'})}}
+    show_change_link = True
 
 
 @admin.register(ProxyProduct)
@@ -44,4 +45,8 @@ class ProxyProductAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.filter(comments__isnull=False)
+        print('qs=', qs.count())
+        myqs = qs.annotate(num_comm=Count('comments'))#.filter(num_comm__gt=0)
+        # myqs = qs.prefetch_related('comments').exclude(comments__isnull=False)
+        print('myqs=', myqs.count())
+        return myqs
