@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
-from django.utils.timezone import now, localtime
+from django.utils.timezone import localtime
 
 from app_comments.models import ProxyProduct, CommentProduct
 
