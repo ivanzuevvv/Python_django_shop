@@ -13,7 +13,7 @@ class CommentProduct(models.Model):
     content = models.TextField(verbose_name='отзыв', max_length=300)
     pub_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     edit_at = models.DateTimeField(auto_now=True, verbose_name='дата редактирования')
-    hide_on = models.BooleanField(verbose_name='Скрыт', default=False)
+    hide_on = models.BooleanField(verbose_name='Скрытый', default=False)
 
     def __str__(self):
         return f'Отзыв к {self.product}'
