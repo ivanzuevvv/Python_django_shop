@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import admin
 from django.db import models
 from django.utils.timezone import now
 
@@ -25,3 +26,22 @@ class CommentProduct(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+
+
+class ProxyProduct(Product):
+    class Meta:
+        proxy = True
+        verbose_name = 'Товар с отзывом'
+        verbose_name_plural = 'Товары с отзывами'
+
+    @admin.display(description='Количество отзывов')
+    def get_count_comments(self):
+        return self.comments.count()
+
+    @admin.display(description='Дата последнего отзыва')
+    def get_last_comments_pub_at(self):
+        return self.comments.last().pub_at
+
+    @admin.display(description='Автор последнего отзыва')
+    def get_last_comments_author(self):
+        return self.comments.last().author
