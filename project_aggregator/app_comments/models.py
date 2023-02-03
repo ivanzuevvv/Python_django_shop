@@ -18,10 +18,10 @@ class CommentProduct(models.Model):
     def __str__(self):
         return f'Отзыв к {self.product}'
 
-    def save(self, *args, **kwargs):
-        if self.hide_on:
-            self.content = f'{self.content}\n\n Скрыто модератором {now}'
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.hide_on:
+    #         self.content = f'{self.content}\n\n Скрыто модератором {now().strftime("%d-%m-%Y %H:%M")}'
+    #     return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Отзыв"
