@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.db import models
-from django.utils.timezone import now
+from django.utils.timezone import localtime
 
 from app_catalog.models import Product
 
@@ -18,10 +18,11 @@ class CommentProduct(models.Model):
     def __str__(self):
         return f'Отзыв к {self.product}'
 
-    # def save(self, *args, **kwargs):
-    #     if self.hide_on:
-    #         self.content = f'{self.content}\n\n Скрыто модератором {now().strftime("%d-%m-%Y %H:%M")}'
-    #     return super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.hide_on:
+            user = kwargs.get('user', '')
+            self.content = f'{self.content}\n\nСкрыто модератором {user}\n{localtime().strftime("%d-%m-%Y %H:%M")}'
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Отзыв"

@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib import admin
+from django.db import models
+from django.forms import Textarea
 from django.utils.timezone import now, localtime
 
 from app_comments.models import ProxyProduct, CommentProduct
@@ -13,7 +15,8 @@ class CommentAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if obj.hide_on:
             obj.content = (f'{obj.content}\n\n'
-                           f'Скрыто модератором {request.user.email} {localtime().strftime("%d-%m-%Y %H:%M")}')
+                           f'Скрыто модератором {request.user.email}\n'
+                           f'{localtime().strftime("%d-%m-%Y %H:%M")}')
         super().save_model(request, obj, form, change)
 
 
@@ -22,7 +25,9 @@ class CommentProductInline(admin.StackedInline):
     verbose_name = "Отзыв"
     verbose_name_plural = "Отзывы"
     extra = 0
-    add_fieldsets = (None, {'fields': ("author", 'product', "content", "hide_on")})
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'cols': '100', 'rows': '2'})}
+    }
 
 
 @admin.register(ProxyProduct)
