@@ -87,7 +87,7 @@
                     <div class="Tabs-links">
                         <a class="Tabs-link_ACTIVE Tabs-link" href="#description"><span>Описание</span></a>
                         <a class="Tabs-link" href="#addit"><span>Характеристики</span></a>
-                        <a class="Tabs-link" href="#reviews"><span>Отзывы ({{ product.review.all|length }})</span></a>
+                        <a class="Tabs-link" href="#reviews"><span>Отзывы ({{ product.comments.all|length }})</span></a>
                     </div>
                     <div class="Tabs-wrap">
                         <div class="Tabs-block" id="description">
@@ -114,29 +114,29 @@
                             </div>
                         </div>
                         <div class="Tabs-block" id="reviews">
-                            {% if product.review.first %}
+                            {% if product.comments.first %}
                             <header class="Section-header">
-                                <h3 class="Section-title">Количество отзывов: {{ product.review.all|length }}</h3>
+                                <h3 class="Section-title">Количество отзывов: {{ product.comments.all|length }}</h3>
                             </header>
                             {% endif %}
                             <div class="Comments">
                                 {% for review in reviews %}
                                 <div class="Comment">
                                     <div class="Comment-column Comment-column_pict">
-                                        <div class="Comment-avatar">
-                                            {% if product.user.avatar %}
-                                            <img src='{{ product.user.avatar.url }}' alt="avatar"/>
-                                            {% endif %}
-                                        </div>
+                                        {% if not review.author.avatar %} <div class="Comment-avatar"></div>
+                                        {% else %} <div class="avatar">
+                                            <img src='{{ review.author.avatar.url }}' height="90" width="90" alt="avatar"/>
+                                                   </div>
+                                        {% endif %}
                                     </div>
                                     <div class="Comment-column">
                                         <header class="Comment-header">
                                             <div>
-                                                <strong class="Comment-title">{{ review.user.full_name }}
-                                                </strong><span class="Comment-date">{{ review.created|date:"E d / Y / G:i" }}</span>
+                                                <strong class="Comment-title">{{ review.author.full_name }}
+                                                </strong><span class="Comment-date">{{ review.pub_at|date:"E d / Y / G:i" }}</span>
                                             </div>
                                         </header>
-                                        <div class="Comment-content">{{ review.text }}
+                                        <div class="Comment-content">{{ review.content }}
                                         </div>
                                     </div>
                                 </div>
@@ -152,17 +152,18 @@
                                 </h3>
                             </header>
                             <div class="Tabs-addComment">
-                                <form class="form" action="#"
+                                <form class="form" action="{% url 'product_detail' product.slug %}"
                                       method="post">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        {{ review_form.text }}
+                                        {{ review_form.content }}
                                         {% for error in review_form.text.errors %}
                                         <div class="form-error">{{ error|escape }}</div>
                                         {% endfor %}
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn_muted" type="submit">Отправить отзыв
+{#                                        <button class="btn btn_muted" type="submit">Отправить отзыв#}
+                                        <button class="btn btn_success" type="submit">Отправить отзыв
                                         </button>
                                     </div>
                                 </form>

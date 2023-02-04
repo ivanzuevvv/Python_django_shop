@@ -37,3 +37,15 @@
 #     user = User.objects.get(email=user)
 #     user.set_password('1234')
 #     user.save()
+
+# import random
+# import lorem
+# from app_comments.models import CommentProduct, ProxyProduct
+# from app_users.models import User
+# count = 1
+# while count < 300:
+#     count += 1
+#     user = random.choice(User.objects.all())
+#     prod = random.choice(ProxyProduct.objects.all())
+#     text = result = lorem.get_paragraph()
+#     CommentProduct.objects.create(author=user, product=prod, content=text)

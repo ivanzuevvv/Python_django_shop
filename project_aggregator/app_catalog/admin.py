@@ -38,6 +38,7 @@ class GalleryInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     ordering = ["available", 'id']
+    list_per_page = 10
     list_filter = ["category", 'available', 'limited']
     list_display = [
         'id', 'get_full_name', 'price', 'stock',

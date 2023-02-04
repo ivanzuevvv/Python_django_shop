@@ -7,7 +7,7 @@ from project_aggregator import settings
 class AppConfigurationsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'app_configurations'
-    verbose_name = 'Настройки сайта'
+    verbose_name = '5. Настройки сайта'
 
     def ready(self):
         SiteSettings = self.get_model('SiteSettings')
