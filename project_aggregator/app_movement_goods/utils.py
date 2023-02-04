@@ -5,7 +5,7 @@ import requests
 from django.db import IntegrityError, transaction
 from requests import ConnectTimeout, HTTPError, ReadTimeout, Timeout
 
-from app_catalog.models import Product
+from app_products.models import Product
 from app_configurations.models import SiteSettings
 from .models import Order
 

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db import models
 from django.utils.timezone import localtime
 
-from app_catalog.models import Product
+from app_products.models import Product
 
 
 class CommentProduct(models.Model):

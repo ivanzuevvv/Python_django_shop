@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from app_catalog.models import Product
+from app_products.models import Product
 
 
 class UserCart(models.Model):

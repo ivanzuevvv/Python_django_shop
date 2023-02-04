@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import FormMixin
 
-from app_catalog.models import Product
+from app_products.models import Product
 from app_configurations.models import SiteSettings
 from app_users.forms import RegUserForm
 from .forms import CartAddProductForm, OrderCreateForm

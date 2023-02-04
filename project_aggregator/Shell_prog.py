@@ -1,7 +1,7 @@
 # import random
 #
 # from app_movement_goods.models import UserCart
-# from app_catalog.models import Product, ExtraData, ValueData, TitleData
+# from app_products.models import Product, ExtraData, ValueData, TitleData
 # from app_users.models import User
 
 # user1 = User.objects.get(pk=9)

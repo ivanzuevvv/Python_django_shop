@@ -21,7 +21,7 @@ def index(request: HttpRequest):
 
 
 class ShopView(TemplateView):
-    template_name = 'app_catalog/index.html'
+    template_name = 'app_product/index.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,7 +42,7 @@ class ShopView(TemplateView):
 
 class ProductDetalView(DetailView):
     model = Product
-    template_name = 'app_catalog/product.html'
+    template_name = 'app_product/product.html'
     context_object_name = 'product'
 
     def get_context_data(self, **kwargs):

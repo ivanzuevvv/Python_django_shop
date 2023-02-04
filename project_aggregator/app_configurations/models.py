@@ -6,7 +6,7 @@ from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from app_catalog.models import Product
+from app_products.models import Product
 from .singletons import SingletonModelSettings
 
 
