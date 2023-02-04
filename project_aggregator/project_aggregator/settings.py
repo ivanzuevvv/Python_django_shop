@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
+    'debug_toolbar',
     'django_mptt_admin',
     'sorl.thumbnail',
     'app_catalog',
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'project_aggregator.urls'
@@ -166,3 +168,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
 APP_SETTINGS_PATH = BASE_DIR / "settings.yaml"
+
+INTERNAL_IPS = ['127.0.0.1']

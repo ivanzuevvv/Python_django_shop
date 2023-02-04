@@ -33,20 +33,20 @@ class CommentProductInline(admin.StackedInline):
 
 @admin.register(ProxyProduct)
 class ProxyProductAdmin(admin.ModelAdmin):
-    ordering = 'comments__pub_at',
+    ordering = 'id',
     date_hierarchy = 'comments__pub_at'
     list_display = [
         '__str__', 'get_count_comments',
         'get_last_comments_pub_at',
-        'get_last_comments_author']
+        'get_last_comments_author'
+    ]
     inlines = [CommentProductInline]
     readonly_fields = ('get_full_name',)
     fields = ['get_full_name']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        print('qs=', qs.count())
-        myqs = qs.annotate(num_comm=Count('comments'))#.filter(num_comm__gt=0)
-        # myqs = qs.prefetch_related('comments').exclude(comments__isnull=False)
-        print('myqs=', myqs.count())
+        myqs = qs.prefetch_related('comments').annotate(num_comm=Count('comments')).exclude(num_comm__lt=1)
+        # myqs = qs.prefetch_related('comments').annotate(num_comm=Count('comments')).filter(num_comm__lt=1)
+        # myqs1 = qs.prefetch_related('comments').filter(comments__product__id__isnull=False).distinct()
         return myqs
