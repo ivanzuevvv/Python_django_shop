@@ -10,7 +10,7 @@ class CommentProduct(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='comments')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='товар', related_name='comments')
-    content = models.TextField(verbose_name='отзыв', max_length=300)
+    content = models.TextField(verbose_name='отзыв', max_length=500)
     pub_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     edit_at = models.DateTimeField(auto_now=True, verbose_name='дата редактирования')
     hide_on = models.BooleanField(verbose_name='Скрытый', default=False)
