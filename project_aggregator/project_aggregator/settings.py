@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'mptt',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'django_mptt_admin',
     'sorl.thumbnail',
     'app_products',
@@ -58,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'project_aggregator.urls'
@@ -169,4 +170,4 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
 APP_SETTINGS_PATH = BASE_DIR / "settings.yaml"
 
-INTERNAL_IPS = ['127.0.0.1']
+# INTERNAL_IPS = ['127.0.0.1']

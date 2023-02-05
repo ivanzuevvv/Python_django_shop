@@ -21,10 +21,11 @@ from . import settings
 
 urlpatterns = [
     path('', include('app_products.urls')),
+    path('api/', include('app_configurations.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('app_users.urls')),
     path('buy/', include('app_movement_goods.urls')),
     path('payment/', include('app_payments.urls')),
-    path('debug/', include('debug_toolbar.urls')),
+    # path('debug/', include('debug_toolbar.urls')),
     path('catalog/', include('app_filter_catalog.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
