@@ -1,12 +1,10 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views import generic
 from django.views.generic import TemplateView, DetailView
 
 from app_comments.forms import CommentForm
@@ -27,11 +25,9 @@ class ShopView(TemplateView):
         context = super().get_context_data(**kwargs)
         quantity = SiteSettings.load()
         context['products'] = (
-            Product.objects.select_related('category').filter(available=True).
-            only('category', 'type_device', 'fabricator', 'model', 'price')[:quantity.quantity_top_product]
-            # Product.objects.prefetch_related('order_items').select_related('category').
-            # filter(available=True).only('category', 'get_full_name', 'price').
-            # annotate(total=Sum('order_items__quantity')).order_by('-total')[:quantity.quantity_top_product]
+            Product.objects.prefetch_related('order_items').select_related('category').
+            filter(available=True).only('category', 'type_device', 'fabricator', 'model', 'price').
+            annotate(total=Sum('order_items__quantity')).order_by('-total')[:quantity.quantity_top_product]
         )
         context['limited'] = (
             Product.objects.select_related('category').
