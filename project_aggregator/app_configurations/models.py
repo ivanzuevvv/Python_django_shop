@@ -6,7 +6,6 @@ from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from app_products.models import Product
 from .singletons import SingletonModelSettings
 
 
@@ -36,14 +35,13 @@ class Category(MPTTModel):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('show_category', args=[str(self.slug)])
+        return reverse('product_by_category', args=[str(self.slug)])
 
     def get_min(self):
         sub_categories = self.get_descendants(include_self=True)
         price = (
-            Product.objects.values('price').filter(category__in=sub_categories).
-            filter(available=True).aggregate(Min('price'))['price__min']
-        )
+            self.products.all().values('price').filter(category__in=sub_categories).
+            filter(available=True).aggregate(Min('price'))['price__min'])
         return price
 
 

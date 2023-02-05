@@ -1,4 +1,4 @@
-{% extends "app_product/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
 
@@ -69,7 +69,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="buttons">
-                                    <button class="btn btn_square btn_dark btn_narrow" type="submit">Применить</button>
+                                    <button class="btn btn_square btn_primary btn_narrow" type="submit">Применить</button>
+{#                                    <button class="btn btn_square btn_dark btn_narrow" type="submit">Применить</button>#}
                                 </div>
                             </div>
                         </form>
@@ -88,7 +89,7 @@
                     {% for card in page_obj %}
                     <div class="Card"><a class="Card-picture" href="{{ card.get_absolute_url }}">
                         <img src="
-                        {% thumbnail card.image.first.image '258x172' padding=True as im %}
+                        {% thumbnail card.images.first.image '258x172' padding=True as im %}
                         {{ im.url }}
                         {% empty %}
                         {% static 'assets/img/content/home/card.jpg' %}
@@ -96,10 +97,10 @@
                              alt="товар"/>
                         </a>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="{{ card.get_absolute_url }}">{{ card.name }}</a>
+                            <strong class="Card-title"><a href="{{ card.get_absolute_url }}">{{ card.get_full_name }}</a>
                             </strong>
                             <div class="Card-description">
-                                <div class="Card-cost"><span class="Card-price">{{ card.price }} руб.</span>
+                                <div class="Card-cost"><span class="Card-price">{{ card.price }} &#8381;</span>
                                 </div>
                                 <div class="Card-category">{{ card.category }}
                                 </div>

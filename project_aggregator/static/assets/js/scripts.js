@@ -405,12 +405,12 @@ var range = function(){
             $line.ionRangeSlider({
                 onStart: function(data){
                     $('.rangePrice').text(
-                        'Р' + data.from + ' - Р' + data.to
+                        data.from + ' ₽ - ' + data.to + ' ₽'
                     )
                 },
                 onChange: function(data){
                     $('.rangePrice').text(
-                        'Р' + data.from + ' - Р' + data.to
+                        data.from + ' ₽ - ' + data.to + ' ₽'
                     )
                 }
             });

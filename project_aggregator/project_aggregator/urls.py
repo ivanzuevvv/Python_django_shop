@@ -26,4 +26,5 @@ urlpatterns = [
     path('buy/', include('app_movement_goods.urls')),
     path('payment/', include('app_payments.urls')),
     path('debug/', include('debug_toolbar.urls')),
+    path('catalog/', include('app_filter_catalog.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

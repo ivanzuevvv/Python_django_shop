@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
 
+from app_configurations.models import SiteSettings
+
 
 class Product(models.Model):
     category = TreeForeignKey(
@@ -29,15 +31,32 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = transliterate.slugify(f'{self.type_device} {self.model} {self.model}')
+        return super().save(*args, **kwargs)
+
     @property
     @admin.display(description='Наименование')
     def get_full_name(self):
         return f'{self.type_device} {self.fabricator} {self.model}'
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = transliterate.slugify(f'{self.type_device} {self.model} {self.model}')
-        return super().save(*args, **kwargs)
+    @property
+    def total_review(self):
+        return len(self.comments.all())
+
+    @property
+    def free_delivery(self):
+        settings = SiteSettings.load()
+        return self.price > settings.min_cost_for_free_delivery
+
+    @property
+    def in_stock(self):
+        return self.stock != 0
+
+    @property
+    def total_sale(self):
+        return sum(item.quantity for item in self.order_items.all())
 
     class Meta:
         ordering = ['price']
