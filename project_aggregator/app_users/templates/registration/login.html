@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% block middle %}
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+        <div class="wrap">
+            <div class="Middle-header">
+                <h1 class="Middle-title">Войти
+                </h1>
+                <ul class="breadcrumbs Middle-breadcrumbs">
+                    <li class="breadcrumbs-item"><a href="{% url 'main' %}">назад</a>
+                    </li>
+                    <li class="breadcrumbs-item breadcrumbs-item_current"><span>войти</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft">
+        <div class="wrap">
+            <div class="Section-column">
+                <div class="Section-columnSection">
+                    <header class="Section-header">
+                        <strong class="Section-title">Навигация</strong>
+                    </header>
+                    <div class="Section-columnContent">
+                        <div class="NavigateProfile">
+                            <ul class="menu menu_vt">
+                                <li class="menu-item"><a class="menu-link" href="{% url 'main' %}">Главная страница</a>
+                                </li>
+                                <li class="menu-item"><a class="menu-link" href="{% url 'registration' %}">Регистрация</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Section-content">
+                <div class="Profile">
+                    <form class="form Profile-form" action="{% url 'login' %}" method="post">
+                        <div class="row">
+                            <div class="row-block">
+                                {% csrf_token %}
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                    <div class="form-error">{{ error|escape }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="form-group">
+                                    <label class="form-label" >Электронная почта</label>
+                                    <input type="text" name="username" class="form-input form-input_error"
+                                           data-validate="require" maxlength="254" placeholder="Введите e-mail"
+                                           autocomplete="email" required="" id="id_username" inputmode="text">
+                                    {% if form.username.errors %}
+                                        {% for error in form.username.errors %}
+                                        <div class="form-error">{{ error|escape }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" >Пароль</label>
+                                    <input type="password" name="password" class="form-input form-input_error"
+                                           data-validate="require" placeholder="Введите пароль" autocomplete="password"
+                                           maxlength="150" required="" id="id_password">
+                                    {% if form.password.errors %}
+                                        {% for error in form.password.errors %}
+                                        <div class="form-error">{{ error|escape }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="Profile-btn">
+                                        <a class="btn btn_success" href="{% url 'password_reset' %}">Сбросить пароль</a>
+                                        <button class="btn btn_primary" type="submit">Войти</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-block">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

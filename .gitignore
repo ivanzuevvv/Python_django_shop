@@ -1,0 +1,6 @@
+.venv/
+.idea/
+debug.log
+#project_aggregator/media/avatars/
+cache/
+__pycache__/
